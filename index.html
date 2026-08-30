@@ -1844,8 +1844,8 @@ function loadCalendarEvents() {
                     Object.entries(
                         calendarEvents
                     ).map(
-                        ([date,data]) =>
-                            [date,data.text]
+                        ([date, data]) =>
+                            [date, data.text]
                     )
                 )
             );
@@ -1858,6 +1858,14 @@ function loadCalendarEvents() {
                 );
 
             }
+
+        },
+        function(error) {
+
+            console.error(
+                "Calendar loading error:",
+                error
+            );
 
         }
     );
@@ -1930,7 +1938,18 @@ function showEvent(
     button.onclick =
         async function() {
 
-            if (event.id) {
+            if (!event.id) {
+
+                alert(
+                    "This event cannot be deleted."
+                );
+
+                return;
+
+            }
+
+
+            try {
 
                 await deleteDoc(
                     doc(
@@ -1940,16 +1959,39 @@ function showEvent(
                     )
                 );
 
+
+                list.innerHTML = "";
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Delete error:",
+                    error
+                );
+
+                alert(
+                    "Could not delete the event. Check the console."
+                );
+
             }
 
         };
 
 
-    box.appendChild(text);
+    box.appendChild(
+        text
+    );
 
-    box.appendChild(button);
+    box.appendChild(
+        button
+    );
 
-    list.appendChild(box);
+    list.appendChild(
+        box
+    );
 
 }
 
@@ -1987,27 +2029,44 @@ document.getElementById(
         }
 
 
-        await addDoc(
-            collection(
-                db,
-                "calendarEvents"
-            ),
-            {
+        try {
 
-                date:
-                    selectedDate,
+            await addDoc(
+                collection(
+                    db,
+                    "calendarEvents"
+                ),
+                {
 
-                text:
-                    text,
+                    date:
+                        selectedDate,
 
-                createdAt:
-                    Date.now()
+                    text:
+                        text,
 
-            }
-        );
+                    createdAt:
+                        Date.now()
+
+                }
+            );
 
 
-        input.value = "";
+            input.value = "";
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Save error:",
+                error
+            );
+
+            alert(
+                "Could not save the event."
+            );
+
+        }
 
     };
 
@@ -2019,13 +2078,14 @@ window.previousMonth =
             currentDate.getMonth() - 1
         );
 
+
         createCalendar(
             Object.fromEntries(
                 Object.entries(
                     calendarEvents
                 ).map(
-                    ([date,data]) =>
-                        [date,data.text]
+                    ([date, data]) =>
+                        [date, data.text]
                 )
             )
         );
@@ -2040,13 +2100,14 @@ window.nextMonth =
             currentDate.getMonth() + 1
         );
 
+
         createCalendar(
             Object.fromEntries(
                 Object.entries(
                     calendarEvents
                 ).map(
-                    ([date,data]) =>
-                        [date,data.text]
+                    ([date, data]) =>
+                        [date, data.text]
                 )
             )
         );
@@ -2055,7 +2116,6 @@ window.nextMonth =
 
 
 /* FUTURE ITEMS */
-
 function loadFutureItems() {
 
     const futureQuery =
