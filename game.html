@@ -13,8 +13,8 @@
 
 body {
     margin: 0;
-    background: #f8f5f1;
-    color: #403934;
+    background: #080b18;
+    color: #f4edf2;
     font-family: Georgia, "Times New Roman", serif;
     overflow: hidden;
     touch-action: none;
@@ -26,8 +26,8 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 25px;
-    background: #f8f5f1;
-    border-bottom: 1px solid #ddd4cc;
+    background: rgba(8,11,24,.96);
+    border-bottom: 1px solid rgba(255,255,255,.12);
     position: relative;
     z-index: 10;
 }
@@ -35,10 +35,11 @@ body {
 .title {
     font-size: 25px;
     font-style: italic;
+    color: #f8edf4;
 }
 
 .back {
-    color: #655950;
+    color: #c7b8c2;
     text-decoration: none;
     font-family: Arial, sans-serif;
     font-size: 11px;
@@ -46,11 +47,16 @@ body {
     text-transform: uppercase;
 }
 
+.back:hover {
+    color: #ff9fca;
+}
+
 .stats {
     display: flex;
     gap: 25px;
     font-family: Arial, sans-serif;
     font-size: 12px;
+    color: #ddd2da;
 }
 
 .game {
@@ -58,11 +64,66 @@ body {
     width: 100%;
     height: calc(100vh - 90px);
     overflow: hidden;
+
     background:
-        radial-gradient(circle at 20% 20%, rgba(210,190,175,.18), transparent 25%),
-        radial-gradient(circle at 80% 70%, rgba(210,190,175,.15), transparent 25%),
-        #f5eee8;
+        radial-gradient(circle at 15% 20%, rgba(80,90,170,.18), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(150,70,130,.16), transparent 25%),
+        radial-gradient(circle at 50% 90%, rgba(50,70,150,.15), transparent 30%),
+        linear-gradient(
+            180deg,
+            #080b18 0%,
+            #0d1226 45%,
+            #111936 100%
+        );
 }
+
+/* STARS */
+
+.game::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,.8) 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(255,255,255,.55) 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(255,180,220,.7) 1px, transparent 1.5px);
+
+    background-size:
+        95px 95px,
+        145px 145px,
+        210px 210px;
+
+    background-position:
+        10px 20px,
+        40px 80px,
+        90px 30px;
+
+    opacity: .65;
+}
+
+/* MOON */
+
+.game::after {
+    content: "";
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    top: 55px;
+    right: 9%;
+
+    background: #fff5fa;
+
+    box-shadow:
+        0 0 25px rgba(255,240,248,.35),
+        0 0 60px rgba(180,150,210,.18);
+
+    opacity: .9;
+}
+
+/* HEARTS */
 
 .heart {
     position: absolute;
@@ -70,6 +131,11 @@ body {
     font-size: 32px;
     user-select: none;
     pointer-events: none;
+
+    filter:
+        drop-shadow(0 0 6px rgba(255,90,160,.8))
+        drop-shadow(0 0 14px rgba(255,70,150,.35));
+
     animation: fall linear forwards;
 }
 
@@ -83,6 +149,8 @@ body {
     }
 }
 
+/* BASKET */
+
 .basket {
     position: absolute;
     bottom: 30px;
@@ -91,9 +159,18 @@ body {
     height: 55px;
     transform: translateX(-50%);
     border-radius: 0 0 35px 35px;
-    background: #9c806c;
-    border: 4px solid #755e50;
-    box-shadow: 0 8px 15px rgba(60,45,35,.15);
+
+    background: linear-gradient(
+        180deg,
+        #d879a5,
+        #9b4774
+    );
+
+    border: 4px solid #713453;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.45),
+        0 0 15px rgba(220,100,160,.2);
 }
 
 .basket::before {
@@ -101,12 +178,14 @@ body {
     position: absolute;
     width: 65px;
     height: 28px;
-    border: 5px solid #755e50;
+    border: 5px solid #713453;
     border-bottom: none;
     border-radius: 50px 50px 0 0;
     top: -27px;
     left: 18px;
 }
+
+/* START / END MESSAGE */
 
 .message {
     position: absolute;
@@ -120,10 +199,16 @@ body {
 }
 
 .message-box {
-    background: rgba(255,253,251,.92);
-    border: 1px solid #ded4cc;
+    background: rgba(13,16,35,.91);
+    border: 1px solid rgba(255,180,220,.25);
     padding: 40px 50px;
-    box-shadow: 0 15px 40px rgba(60,45,35,.08);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.55),
+        0 0 35px rgba(180,80,150,.12);
+
+    backdrop-filter: blur(8px);
+
     pointer-events: auto;
 }
 
@@ -131,33 +216,47 @@ body {
     margin: 0 0 10px;
     font-size: 42px;
     font-weight: normal;
+    color: #fff4fa;
 }
 
 .message-box p {
-    color: #81746c;
+    color: #c9bac5;
     font-style: italic;
     line-height: 1.6;
 }
 
 button {
     border: none;
-    background: #51463f;
+
+    background: linear-gradient(
+        135deg,
+        #d96f9e,
+        #a94e7b
+    );
+
     color: white;
     padding: 13px 25px;
     cursor: pointer;
+
     font-family: Arial, sans-serif;
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
+
+    box-shadow: 0 5px 18px rgba(210,80,140,.25);
 }
 
 button:hover {
-    background: #716057;
+    background: linear-gradient(
+        135deg,
+        #ed83b1,
+        #bd5b8c
+    );
 }
 
 .controls {
     margin-top: 20px;
-    color: #95877e;
+    color: #958995;
     font-family: Arial, sans-serif;
     font-size: 10px;
 }
@@ -182,6 +281,13 @@ button:hover {
         height: calc(100vh - 75px);
     }
 
+    .game::after {s
+        width: 70px;
+        height: 70px;
+        top: 35px;
+        right: 8%;
+    }
+
     .basket {
         width: 95px;
         height: 48px;
@@ -198,7 +304,6 @@ button:hover {
     }
 }
 </style>
-
 </head>
 
 <body>
@@ -260,7 +365,52 @@ button:hover {
 
 </div>
 
-<script>
+<script type="module">
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+/* FIREBASE */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCs6bRbvBM0qx2gj85MBAuhc2S4zaWC-KE",
+
+    authDomain:
+        "zihan-and-ainy.firebaseapp.com",
+
+    projectId:
+        "zihan-and-ainy",
+
+    storageBucket:
+        "zihan-and-ainy.firebasestorage.app",
+
+    messagingSenderId:
+        "481324175476",
+
+    appId:
+        "1:481324175476:web:bf3759bb4ce5323348c121"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getFirestore(app);
+
+
+/* GAME ELEMENTS */
 
 const game =
     document.getElementById("game");
@@ -281,6 +431,8 @@ const startButton =
     document.getElementById("startButton");
 
 
+/* GAME VARIABLES */
+
 let score = 0;
 let time = 30;
 let playing = false;
@@ -288,6 +440,8 @@ let basketX = 50;
 let timer;
 let heartSpawner;
 
+
+/* MOVE BASKET */
 
 function moveBasket(x) {
 
@@ -312,6 +466,8 @@ function moveBasket(x) {
 
 }
 
+
+/* KEYBOARD CONTROLS */
 
 document.addEventListener(
     "keydown",
@@ -351,17 +507,23 @@ document.addEventListener(
 );
 
 
+/* MOUSE CONTROL */
+
 game.addEventListener(
     "mousemove",
     function(event) {
 
         if (!playing) return;
 
-        moveBasket(event.clientX);
+        moveBasket(
+            event.clientX
+        );
 
     }
 );
 
+
+/* PHONE CONTROL */
 
 game.addEventListener(
     "touchmove",
@@ -377,6 +539,8 @@ game.addEventListener(
     { passive: true }
 );
 
+
+/* CREATE HEART */
 
 function createHeart() {
 
@@ -406,7 +570,9 @@ function createHeart() {
     heart.style.animationDuration =
         duration + "s";
 
-    game.appendChild(heart);
+    game.appendChild(
+        heart
+    );
 
 
     const check =
@@ -416,6 +582,7 @@ function createHeart() {
                 if (!playing) {
 
                     clearInterval(check);
+
                     heart.remove();
 
                     return;
@@ -471,17 +638,66 @@ function createHeart() {
 }
 
 
+/* SAVE SCORE */
+
+async function saveScore() {
+
+    try {
+
+        await addDoc(
+            collection(
+                db,
+                "leaderboard"
+            ),
+            {
+
+                name:
+                    "Zihan",
+
+                score:
+                    score,
+
+                createdAt:
+                    Date.now()
+
+            }
+        );
+
+        console.log(
+            "Score saved!"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Could not save score:",
+            error
+        );
+
+    }
+
+}
+
+
+/* START GAME */
+
 function startGame() {
 
     score = 0;
+
     time = 30;
+
     playing = true;
+
 
     scoreDisplay.textContent =
         score;
 
     timeDisplay.textContent =
         time;
+
 
     message.style.display =
         "none";
@@ -517,16 +733,26 @@ function startGame() {
 }
 
 
+/* END GAME */
+
 function endGame() {
 
     playing = false;
 
     clearInterval(timer);
-    clearInterval(heartSpawner);
+
+    clearInterval(
+        heartSpawner
+    );
+
+
+    saveScore();
 
 
     document
-        .querySelectorAll(".heart")
+        .querySelectorAll(
+            ".heart"
+        )
         .forEach(
             heart =>
                 heart.remove()
@@ -557,6 +783,8 @@ function endGame() {
 
 }
 
+
+/* START BUTTON */
 
 startButton.addEventListener(
     "click",
