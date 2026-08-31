@@ -136,7 +136,6 @@ body::before {
 }
 
 .back:hover {
-
     color: white;
 }
 
@@ -234,8 +233,6 @@ button:disabled {
     letter-spacing: 1px;
 }
 
-/* INPUTS */
-
 input,
 select {
 
@@ -262,7 +259,6 @@ select {
 }
 
 input::placeholder {
-
     color: #858092;
 }
 
@@ -274,11 +270,8 @@ select:focus {
 }
 
 select option {
-
     color: black;
 }
-
-/* QUESTION CREATOR */
 
 .question-box {
 
@@ -383,16 +376,6 @@ select option {
     color: #d9aab4;
 }
 
-.random-button {
-
-    width: 100%;
-
-    margin-top: 10px;
-
-    background:
-        rgba(180,160,230,.12);
-}
-
 .start-button {
 
     width: 100%;
@@ -405,7 +388,47 @@ select option {
         rgba(231,184,202,.14);
 }
 
-/* ROOM CODE */
+.mode-choice {
+
+    display: grid;
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.mode-button {
+
+    padding: 18px;
+
+    text-align: left;
+}
+
+.mode-title {
+
+    font-family: Georgia, serif;
+
+    font-size: 18px;
+
+    text-transform: none;
+
+    letter-spacing: 0;
+}
+
+.mode-description {
+
+    margin-top: 5px;
+
+    color: #9992a5;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    text-transform: none;
+
+    letter-spacing: 0;
+}
 
 .room-code {
 
@@ -462,11 +485,8 @@ select option {
 }
 
 .player-name {
-
     color: #e7b8ca;
 }
-
-/* QUIZ */
 
 .quiz-question {
 
@@ -523,15 +543,6 @@ select option {
     font-size: 12px;
 }
 
-.answer-button.selected {
-
-    background:
-        rgba(231,184,202,.22);
-
-    border-color:
-        rgba(231,184,202,.4);
-}
-
 .answer-button.correct {
 
     background:
@@ -552,8 +563,6 @@ select option {
 
     color: #d6aebe;
 }
-
-/* SCORE */
 
 .score-board {
 
@@ -579,7 +588,6 @@ select option {
 }
 
 .score-number {
-
     font-size: 28px;
 }
 
@@ -631,12 +639,38 @@ select option {
     margin-top: 15px;
 }
 
-/* MOBILE */
+.success {
+
+    color: #b8d8c1;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+
+    margin-top: 15px;
+}
+
+.turn-banner {
+
+    padding: 15px;
+
+    margin: 20px 0;
+
+    background:
+        rgba(231,184,202,.08);
+
+    border-radius: 10px;
+
+    color: #dcb7c6;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+}
 
 @media (max-width: 600px) {
 
     body {
-
         padding: 15px 0;
     }
 
@@ -649,7 +683,6 @@ select option {
     }
 
     h1 {
-
         font-size: 38px;
     }
 
@@ -659,7 +692,6 @@ select option {
 
         letter-spacing: 5px;
     }
-
 }
 
 </style>
@@ -710,9 +742,7 @@ select option {
 
 </div>
 
-
 <script type="module">
-
 
 /* FIREBASE */
 
@@ -722,7 +752,6 @@ import {
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-
 import {
     getAuth,
     onAuthStateChanged
@@ -730,14 +759,15 @@ import {
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-
 import {
     getFirestore,
     doc,
     setDoc,
     getDoc,
     updateDoc,
-    onSnapshot
+    onSnapshot,
+    collection,
+    addDoc
 }
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -774,19 +804,14 @@ const app =
         firebaseConfig
     );
 
-
 const auth =
     getAuth(app);
-
 
 const db =
     getFirestore(app);
 
-
 const container =
-    document.getElementById(
-        "app"
-    );
+    document.getElementById("app");
 
 
 let currentUser = null;
@@ -798,6 +823,464 @@ let roomListener = null;
 let questions = [];
 
 let advancing = false;
+
+
+/* RANDOM QUESTION BANK */
+
+const randomQuestionBank = [
+
+    {
+        question: "What is the capital of France?",
+        answers: [
+            "Madrid",
+            "Paris",
+            "Rome",
+            "Berlin"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many days are in a leap year?",
+        answers: [
+            "365",
+            "366",
+            "364",
+            "367"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which planet is known as the Red Planet?",
+        answers: [
+            "Venus",
+            "Mars",
+            "Jupiter",
+            "Mercury"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many continents are there?",
+        answers: [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which ocean is the largest?",
+        answers: [
+            "Atlantic",
+            "Indian",
+            "Pacific",
+            "Arctic"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "What is 12 × 8?",
+        answers: [
+            "86",
+            "96",
+            "108",
+            "88"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which animal is known as the king of the jungle?",
+        answers: [
+            "Tiger",
+            "Lion",
+            "Elephant",
+            "Leopard"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which country is famous for the Eiffel Tower?",
+        answers: [
+            "Italy",
+            "France",
+            "Spain",
+            "Portugal"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many sides does a hexagon have?",
+        answers: [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which gas do humans need to breathe?",
+        answers: [
+            "Oxygen",
+            "Carbon dioxide",
+            "Helium",
+            "Hydrogen"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What is the largest planet in our solar system?",
+        answers: [
+            "Earth",
+            "Saturn",
+            "Jupiter",
+            "Neptune"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which sport uses a racket and a shuttlecock?",
+        answers: [
+            "Tennis",
+            "Badminton",
+            "Squash",
+            "Table tennis"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many players are on a football team on the pitch?",
+        answers: [
+            "9",
+            "10",
+            "11",
+            "12"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "What is the fastest land animal?",
+        answers: [
+            "Lion",
+            "Horse",
+            "Cheetah",
+            "Leopard"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which month comes after September?",
+        answers: [
+            "August",
+            "October",
+            "November",
+            "December"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many hours are in a day?",
+        answers: [
+            "12",
+            "18",
+            "24",
+            "36"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which is the smallest prime number?",
+        answers: [
+            "0",
+            "1",
+            "2",
+            "3"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "What is the boiling point of water at sea level?",
+        answers: [
+            "50°C",
+            "75°C",
+            "100°C",
+            "150°C"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which instrument has black and white keys?",
+        answers: [
+            "Guitar",
+            "Piano",
+            "Drum",
+            "Violin"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which shape has three sides?",
+        answers: [
+            "Square",
+            "Triangle",
+            "Circle",
+            "Pentagon"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which planet is closest to the Sun?",
+        answers: [
+            "Earth",
+            "Mars",
+            "Mercury",
+            "Venus"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "What is the largest mammal?",
+        answers: [
+            "Elephant",
+            "Blue whale",
+            "Giraffe",
+            "Shark"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many letters are in the English alphabet?",
+        answers: [
+            "24",
+            "25",
+            "26",
+            "27"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which country is shaped like a boot?",
+        answers: [
+            "Italy",
+            "Greece",
+            "Spain",
+            "Brazil"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What color do you get when you mix blue and yellow?",
+        answers: [
+            "Purple",
+            "Green",
+            "Orange",
+            "Pink"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many minutes are in one hour?",
+        answers: [
+            "30",
+            "45",
+            "60",
+            "90"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which is the hottest planet in our solar system?",
+        answers: [
+            "Mercury",
+            "Venus",
+            "Mars",
+            "Jupiter"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "What is the opposite of north?",
+        answers: [
+            "East",
+            "West",
+            "South",
+            "Up"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which animal is known for its black and white stripes?",
+        answers: [
+            "Zebra",
+            "Tiger",
+            "Panda",
+            "Skunk"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "How many sides does a square have?",
+        answers: [
+            "3",
+            "4",
+            "5",
+            "6"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which planet do we live on?",
+        answers: [
+            "Mars",
+            "Earth",
+            "Venus",
+            "Saturn"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which fruit is usually yellow and curved?",
+        answers: [
+            "Apple",
+            "Banana",
+            "Orange",
+            "Grape"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "What is 10 × 10?",
+        answers: [
+            "10",
+            "50",
+            "100",
+            "1000"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which season comes after summer?",
+        answers: [
+            "Spring",
+            "Winter",
+            "Autumn",
+            "Summer"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Which bird is famous for not being able to fly?",
+        answers: [
+            "Eagle",
+            "Ostrich",
+            "Falcon",
+            "Sparrow"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many wheels does a normal bicycle have?",
+        answers: [
+            "1",
+            "2",
+            "3",
+            "4"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which is bigger?",
+        answers: [
+            "1 kilogram",
+            "1 gram",
+            "They are equal",
+            "Neither"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What is the first month of the year?",
+        answers: [
+            "December",
+            "January",
+            "February",
+            "March"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which color is made by mixing red and blue?",
+        answers: [
+            "Green",
+            "Purple",
+            "Orange",
+            "Yellow"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "How many legs does a spider have?",
+        answers: [
+            "6",
+            "8",
+            "10",
+            "12"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Which sense is associated with your nose?",
+        answers: [
+            "Sight",
+            "Hearing",
+            "Smell",
+            "Touch"
+        ],
+        correct: 2
+    }
+
+];
 
 
 /* AUTH */
@@ -812,248 +1295,12 @@ onAuthStateChanged(
 );
 
 
-/* RANDOM QUESTION DATABASE */
-
-/*
-    Add more questions here whenever you want.
-
-    The system randomly chooses from these
-    without repeating a question in the
-    same round.
-*/
-
-const randomQuestionPool = [
-
-    {
-        question: "What is my favorite color?",
-        answers: [
-            "Black",
-            "Pink",
-            "Blue",
-            "White"
-        ],
-        correct: 0
-    },
-
-    {
-        question: "What would I choose for a perfect date?",
-        answers: [
-            "Movie night",
-            "Beach day",
-            "Dinner",
-            "All of these"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "Which one am I most likely to do when I'm bored?",
-        answers: [
-            "Play games",
-            "Sleep",
-            "Watch videos",
-            "Text you"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "What is something I could never get tired of?",
-        answers: [
-            "Music",
-            "Football",
-            "Food",
-            "Talking to you"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "Which would I rather have?",
-        answers: [
-            "A million dollars",
-            "A dream house",
-            "A perfect vacation",
-            "All three"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "What am I most likely to forget?",
-        answers: [
-            "My phone",
-            "My keys",
-            "What I was saying",
-            "Nothing"
-        ],
-        correct: 2
-    },
-
-    {
-        question: "What kind of movie would I probably choose?",
-        answers: [
-            "Comedy",
-            "Horror",
-            "Romance",
-            "Action"
-        ],
-        correct: 0
-    },
-
-    {
-        question: "If I could travel anywhere, what would I choose?",
-        answers: [
-            "Japan",
-            "Italy",
-            "Switzerland",
-            "Anywhere with you"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "What is one thing that instantly makes me happier?",
-        answers: [
-            "Food",
-            "Music",
-            "A message from you",
-            "Money"
-        ],
-        correct: 2
-    },
-
-    {
-        question: "What would I probably spend money on first?",
-        answers: [
-            "Food",
-            "Clothes",
-            "Games",
-            "A gift"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "Which sounds most like me?",
-        answers: [
-            "Quiet",
-            "Chaotic",
-            "Serious",
-            "A little bit of everything"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "What would I rather do on a free evening?",
-        answers: [
-            "Stay home",
-            "Go out",
-            "Play football",
-            "Spend time with you"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "What is more important to me?",
-        answers: [
-            "Money",
-            "Success",
-            "Friends",
-            "People I love"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "Which one would I pick?",
-        answers: [
-            "Sunrise",
-            "Sunset",
-            "Midnight",
-            "Rainy afternoon"
-        ],
-        correct: 2
-    },
-
-    {
-        question: "What am I most likely to say?",
-        answers: [
-            "I'm hungry",
-            "I'm tired",
-            "Wait",
-            "What?"
-        ],
-        correct: 2
-    },
-
-    {
-        question: "What would make the best surprise for me?",
-        answers: [
-            "Food",
-            "A gift",
-            "A handwritten note",
-            "Something completely unexpected"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "Which activity would I probably enjoy most?",
-        answers: [
-            "Gaming",
-            "Football",
-            "Building/designing things",
-            "Sleeping"
-        ],
-        correct: 2
-    },
-
-    {
-        question: "What kind of music would I most likely listen to?",
-        answers: [
-            "Pop",
-            "Rap",
-            "Japanese music",
-            "Whatever sounds good"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "If I had an entire day with no responsibilities, what would I do?",
-        answers: [
-            "Sleep",
-            "Game",
-            "Go out",
-            "Spend it with you"
-        ],
-        correct: 3
-    },
-
-    {
-        question: "What matters most in a relationship?",
-        answers: [
-            "Trust",
-            "Communication",
-            "Effort",
-            "All of these"
-        ],
-        correct: 3
-    }
-
-];
-
-
 /* MAIN MENU */
 
 document
     .getElementById("hostButton")
     .onclick =
-    showHostScreen;
-
+    showHostSetup;
 
 document
     .getElementById("joinButton")
@@ -1061,11 +1308,9 @@ document
     showJoinScreen;
 
 
-/* HOST SCREEN */
+/* HOST SETUP */
 
-function showHostScreen() {
-
-    questions = [];
+function showHostSetup() {
 
     container.innerHTML = `
 
@@ -1086,7 +1331,115 @@ function showHostScreen() {
         </h1>
 
         <p class="subtitle">
-            Create your questions
+            Choose how this turn will work
+        </p>
+
+        <div class="mode-choice">
+
+            <button
+                class="mode-button"
+                id="randomMode"
+            >
+
+                <div class="mode-title">
+                    🎲 Random Questions
+                </div>
+
+                <div class="mode-description">
+                    Questions are chosen randomly from the trivia bank.
+                </div>
+
+            </button>
+
+            <button
+                class="mode-button"
+                id="personalMode"
+            >
+
+                <div class="mode-title">
+                    ❤️ Personal Questions
+                </div>
+
+                <div class="mode-description">
+                    Make your own questions and choose the correct answers.
+                </div>
+
+            </button>
+
+        </div>
+
+    `;
+
+    document
+        .getElementById("backButton")
+        .onclick =
+        function(event) {
+
+            event.preventDefault();
+
+            showMenu();
+
+        };
+
+    document
+        .getElementById("randomMode")
+        .onclick =
+        function() {
+
+            showRandomSetup();
+
+        };
+
+    document
+        .getElementById("personalMode")
+        .onclick =
+        function() {
+
+            showPersonalSetup();
+
+        };
+
+}
+
+
+/* RANDOM SETUP */
+
+function showRandomSetup() {
+
+    questions =
+        createRandomQuestions(5);
+
+    createRoom();
+
+}
+
+
+/* PERSONAL SETUP */
+
+function showPersonalSetup() {
+
+    questions = [];
+
+    container.innerHTML = `
+
+        <a
+            class="back"
+            href="#"
+            id="backButton"
+        >
+            ← Back
+        </a>
+
+        <div class="heart">
+            ♥
+        </div>
+
+        <h1>
+            Personal Round
+        </h1>
+
+        <p class="subtitle">
+            Make questions for them
         </p>
 
         <div class="question-box">
@@ -1121,9 +1474,7 @@ function showHostScreen() {
                 placeholder="Answer 4"
             >
 
-            <select
-                id="correctAnswer"
-            >
+            <select id="correctAnswer">
 
                 <option value="">
                     Choose the correct answer
@@ -1147,17 +1498,8 @@ function showHostScreen() {
 
             </select>
 
-            <button
-                id="addQuestion"
-            >
+            <button id="addQuestion">
                 + Add Question
-            </button>
-
-            <button
-                id="randomQuestion"
-                class="random-button"
-            >
-                ✦ Add Random Questions
             </button>
 
         </div>
@@ -1170,13 +1512,12 @@ function showHostScreen() {
 
         <button
             class="start-button"
-            id="startRound"
+            id="createRoomButton"
         >
             Create Room
         </button>
 
     `;
-
 
     document
         .getElementById("backButton")
@@ -1189,31 +1530,22 @@ function showHostScreen() {
 
         };
 
-
     document
         .getElementById("addQuestion")
         .onclick =
         addQuestion;
 
-
     document
-        .getElementById("randomQuestion")
-        .onclick =
-        addRandomQuestions;
-
-
-    document
-        .getElementById("startRound")
+        .getElementById("createRoomButton")
         .onclick =
         createRoom;
-
 
     renderQuestions();
 
 }
 
 
-/* ADD CUSTOM QUESTION */
+/* ADD PERSONAL QUESTION */
 
 function addQuestion() {
 
@@ -1222,7 +1554,6 @@ function addQuestion() {
         .getElementById("question")
         .value
         .trim();
-
 
     const answers = [
 
@@ -1248,12 +1579,10 @@ function addQuestion() {
 
     ];
 
-
     const correct =
         document
         .getElementById("correctAnswer")
         .value;
-
 
     if (
         !question ||
@@ -1271,7 +1600,6 @@ function addQuestion() {
 
     }
 
-
     questions.push({
 
         question:
@@ -1285,11 +1613,9 @@ function addQuestion() {
 
     });
 
-
     document
         .getElementById("question")
         .value = "";
-
 
     for (
         let i = 1;
@@ -1305,120 +1631,9 @@ function addQuestion() {
 
     }
 
-
     document
         .getElementById("correctAnswer")
         .value = "";
-
-
-    renderQuestions();
-
-}
-
-
-/* ADD RANDOM QUESTIONS */
-
-function addRandomQuestions() {
-
-    const amountInput =
-        prompt(
-            "How many random questions would you like?",
-            "5"
-        );
-
-
-    if (amountInput === null)
-        return;
-
-
-    let amount =
-        Number(amountInput);
-
-
-    if (
-        !Number.isInteger(amount) ||
-        amount < 1
-    ) {
-
-        alert(
-            "Enter a valid number."
-        );
-
-        return;
-
-    }
-
-
-    const available =
-        randomQuestionPool.filter(
-            function(randomQuestion) {
-
-                return !questions.some(
-                    function(existingQuestion) {
-
-                        return (
-                            existingQuestion.question ===
-                            randomQuestion.question
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-    if (available.length === 0) {
-
-        alert(
-            "You've already used all the random questions in this round ❤️"
-        );
-
-        return;
-
-    }
-
-
-    amount =
-        Math.min(
-            amount,
-            available.length
-        );
-
-
-    const shuffled =
-        [...available].sort(
-            () =>
-                Math.random() - 0.5
-        );
-
-
-    const selected =
-        shuffled.slice(
-            0,
-            amount
-        );
-
-
-    selected.forEach(
-        function(item) {
-
-            questions.push({
-
-                question:
-                    item.question,
-
-                answers:
-                    [...item.answers],
-
-                correct:
-                    item.correct
-
-            });
-
-        }
-    );
-
 
     renderQuestions();
 
@@ -1433,13 +1648,10 @@ function renderQuestions() {
         document
         .getElementById("questionList");
 
-
     if (!list)
         return;
 
-
     list.innerHTML = "";
-
 
     if (
         questions.length === 0
@@ -1455,20 +1667,16 @@ function renderQuestions() {
 
     }
 
-
     questions.forEach(
         function(item, index) {
-
 
             const card =
                 document.createElement(
                     "div"
                 );
 
-
             card.className =
                 "question-card";
-
 
             card.innerHTML = `
 
@@ -1477,57 +1685,38 @@ function renderQuestions() {
                 </div>
 
                 <div class="question-text">
-                    ${escapeHTML(
-                        item.question
-                    )}
+                    ${escapeHTML(item.question)}
                 </div>
 
                 <div class="answer-line">
 
-                    A.
-                    ${escapeHTML(
-                        item.answers[0]
-                    )}
-
+                    A. ${escapeHTML(item.answers[0])}
                     <br>
 
-                    B.
-                    ${escapeHTML(
-                        item.answers[1]
-                    )}
-
+                    B. ${escapeHTML(item.answers[1])}
                     <br>
 
-                    C.
-                    ${escapeHTML(
-                        item.answers[2]
-                    )}
-
+                    C. ${escapeHTML(item.answers[2])}
                     <br>
 
-                    D.
-                    ${escapeHTML(
-                        item.answers[3]
-                    )}
+                    D. ${escapeHTML(item.answers[3])}
 
                 </div>
 
                 <div class="correct-answer">
 
                     ✓ Correct:
-                    Answer ${item.correct + 1}
+                    ${String.fromCharCode(65 + item.correct)}
 
                 </div>
 
                 <button
                     class="delete-question"
-                    data-index="${index}"
                 >
                     Delete Question
                 </button>
 
             `;
-
 
             card
                 .querySelector(
@@ -1545,11 +1734,51 @@ function renderQuestions() {
 
                 };
 
-
             list.appendChild(card);
 
         }
     );
+
+}
+
+
+/* CREATE RANDOM QUESTIONS */
+
+function createRandomQuestions(amount) {
+
+    const shuffled =
+        [...randomQuestionBank]
+        .sort(
+            () =>
+                Math.random() - 0.5
+        );
+
+    return shuffled
+        .slice(
+            0,
+            Math.min(
+                amount,
+                shuffled.length
+            )
+        )
+        .map(
+            function(question) {
+
+                return {
+
+                    question:
+                        question.question,
+
+                    answers:
+                        [...question.answers],
+
+                    correct:
+                        question.correct
+
+                };
+
+            }
+        );
 
 }
 
@@ -1563,13 +1792,12 @@ async function createRoom() {
     ) {
 
         alert(
-            "Add at least one question first ❤️"
+            "You need at least one question."
         );
 
         return;
 
     }
-
 
     if (!currentUser) {
 
@@ -1581,55 +1809,76 @@ async function createRoom() {
 
     }
 
-
-    const roomCode =
-        generateRoomCode();
-
-
-    const room = {
-
-        hostId:
-            currentUser.uid,
-
-        hostName:
-            currentUser.email
-            ? currentUser.email.split("@")[0]
-            : "Host",
-
-        playerId:
-            "",
-
-        playerName:
-            "",
-
-        questions:
-            questions,
-
-        currentQuestion:
-            0,
-
-        hostScore:
-            0,
-
-        playerScore:
-            0,
-
-        playerAnswer:
-            null,
-
-        playerAnswered:
-            false,
-
-        status:
-            "waiting",
-
-        createdAt:
-            Date.now()
-
-    };
-
-
     try {
+
+        let roomCode;
+
+        let exists = true;
+
+        while (exists) {
+
+            roomCode =
+                generateRoomCode();
+
+            const check =
+                await getDoc(
+                    doc(
+                        db,
+                        "triviaRooms",
+                        roomCode
+                    )
+                );
+
+            exists =
+                check.exists();
+
+        }
+
+        const room = {
+
+            hostId:
+                currentUser.uid,
+
+            hostName:
+                getUserName(),
+
+            playerId:
+                "",
+
+            playerName:
+                "",
+
+            questions:
+                questions,
+
+            currentQuestion:
+                0,
+
+            hostScore:
+                0,
+
+            playerScore:
+                0,
+
+            playerAnswer:
+                null,
+
+            playerAnswered:
+                false,
+
+            status:
+                "waiting",
+
+            turn:
+                "host",
+
+            roundNumber:
+                1,
+
+            createdAt:
+                Date.now()
+
+        };
 
         await setDoc(
             doc(
@@ -1640,15 +1889,12 @@ async function createRoom() {
             room
         );
 
-
         currentRoom =
             roomCode;
-
 
         showHostRoom(
             roomCode
         );
-
 
         listenToRoom(
             roomCode
@@ -1708,460 +1954,15 @@ function showHostRoom(
             Waiting for the other player...
         </div>
 
-        <div
-            id="hostQuestionArea"
-        >
-
-            <div class="empty">
-                Once they join, the round will begin.
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* LISTEN TO ROOM */
-
-function listenToRoom(
-    roomCode
-) {
-
-    if (roomListener) {
-
-        roomListener();
-
-    }
-
-
-    roomListener =
-        onSnapshot(
-
-            doc(
-                db,
-                "triviaRooms",
-                roomCode
-            ),
-
-            function(snapshot) {
-
-                if (!snapshot.exists()) {
-
-                    alert(
-                        "This room no longer exists."
-                    );
-
-                    showMenu();
-
-                    return;
-
-                }
-
-
-                const room =
-                    snapshot.data();
-
-
-                currentRoom =
-                    roomCode;
-
-
-                if (
-                    room.hostId ===
-                    currentUser?.uid
-                ) {
-
-                    updateHostView(
-                        room
-                    );
-
-                }
-
-                else {
-
-                    updatePlayerView(
-                        room
-                    );
-
-                }
-
-            },
-
-            function(error) {
-
-                console.error(
-                    error
-                );
-
-            }
-
-        );
-
-}
-
-
-/* HOST VIEW */
-
-function updateHostView(
-    room
-) {
-
-    const status =
-        document.getElementById(
-            "roomStatus"
-        );
-
-
-    const area =
-        document.getElementById(
-            "hostQuestionArea"
-        );
-
-
-    if (!status || !area)
-        return;
-
-
-    if (!room.playerId) {
-
-        status.innerHTML =
-            "Waiting for the other player...";
-
-
-        area.innerHTML = `
+        <div id="hostQuestionArea">
 
             <div class="empty">
                 Give the room code to the other player.
             </div>
 
-        `;
-
-        return;
-
-    }
-
-
-    status.innerHTML =
-        `<span class="player-name">
-            ${escapeHTML(
-                room.playerName
-            )}
-        </span>
-        joined the room ❤️`;
-
-
-    if (
-        room.status ===
-        "waiting"
-    ) {
-
-        area.innerHTML = `
-
-            <button
-                id="beginGame"
-                class="start-button"
-            >
-                Start Round
-            </button>
-
-        `;
-
-
-        document
-            .getElementById("beginGame")
-            .onclick =
-            async function() {
-
-                await updateDoc(
-                    doc(
-                        db,
-                        "triviaRooms",
-                        currentRoom
-                    ),
-                    {
-                        status:
-                            "playing"
-                    }
-                );
-
-            };
-
-
-        return;
-
-    }
-
-
-    if (
-        room.status ===
-        "finished"
-    ) {
-
-        showResults(
-            room
-        );
-
-        return;
-
-    }
-
-
-    const question =
-        room.questions[
-            room.currentQuestion
-        ];
-
-
-    if (!question)
-        return;
-
-
-    area.innerHTML = `
-
-        <div class="score-board">
-
-            <div class="score-box">
-
-                <div class="score-number">
-                    ${room.hostScore}
-                </div>
-
-                <div class="score-name">
-                    You
-                </div>
-
-            </div>
-
-            <div class="score-box">
-
-                <div class="score-number">
-                    ${room.playerScore}
-                </div>
-
-                <div class="score-name">
-                    ${escapeHTML(
-                        room.playerName
-                    )}
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="quiz-question">
-
-            <div class="question-counter">
-                Question
-                ${room.currentQuestion + 1}
-                /
-                ${room.questions.length}
-            </div>
-
-            <h2>
-                ${escapeHTML(
-                    question.question
-                )}
-            </h2>
-
-            <div class="answers">
-
-                ${question.answers
-                    .map(
-                        function(answer, index) {
-
-                            return `
-
-                                <button
-                                    class="answer-button"
-                                    disabled
-                                >
-
-                                    <span
-                                        class="answer-letter"
-                                    >
-                                        ${String.fromCharCode(
-                                            65 + index
-                                        )}
-                                    </span>
-
-                                    ${escapeHTML(
-                                        answer
-                                    )}
-
-                                </button>
-
-                            `;
-
-                        }
-                    )
-                    .join("")}
-
-            </div>
-
-            <div class="answer-status">
-
-                ${
-                    room.playerAnswered
-                    ? "The other player has answered! ❤️"
-                    : "Waiting for their answer..."
-                }
-
-            </div>
-
         </div>
 
     `;
-
-
-    if (
-        room.playerAnswered
-    ) {
-
-        const selected =
-            room.playerAnswer;
-
-
-        const buttons =
-            area.querySelectorAll(
-                ".answer-button"
-            );
-
-
-        if (
-            buttons[selected]
-        ) {
-
-            buttons[
-                selected
-            ].classList.add(
-                selected ===
-                question.correct
-                ? "correct"
-                : "wrong"
-            );
-
-        }
-
-
-        setTimeout(
-            async function() {
-
-                const latest =
-                    await getDoc(
-                        doc(
-                            db,
-                            "triviaRooms",
-                            currentRoom
-                        )
-                    );
-
-
-                if (!latest.exists())
-                    return;
-
-
-                const latestRoom =
-                    latest.data();
-
-
-                if (
-                    latestRoom.playerAnswered
-                ) {
-
-                    moveToNextQuestion(
-                        latestRoom
-                    );
-
-                }
-
-            },
-            1200
-        );
-
-    }
-
-}
-
-
-/* MOVE TO NEXT QUESTION */
-
-async function moveToNextQuestion(
-    room
-) {
-
-    if (advancing)
-        return;
-
-
-    advancing = true;
-
-
-    try {
-
-        if (
-            room.currentQuestion + 1 >=
-            room.questions.length
-        ) {
-
-            await updateDoc(
-                doc(
-                    db,
-                    "triviaRooms",
-                    currentRoom
-                ),
-                {
-                    status:
-                        "finished"
-                }
-            );
-
-        }
-
-        else {
-
-            await updateDoc(
-                doc(
-                    db,
-                    "triviaRooms",
-                    currentRoom
-                ),
-                {
-
-                    currentQuestion:
-                        room.currentQuestion + 1,
-
-                    playerAnswer:
-                        null,
-
-                    playerAnswered:
-                        false
-
-                }
-            );
-
-        }
-
-    }
-
-    catch(error) {
-
-        console.error(
-            error
-        );
-
-    }
-
-
-    setTimeout(
-        function() {
-
-            advancing = false;
-
-        },
-        500
-    );
 
 }
 
@@ -2224,7 +2025,6 @@ function showJoinScreen() {
 
     `;
 
-
     document
         .getElementById("backButton")
         .onclick =
@@ -2235,7 +2035,6 @@ function showJoinScreen() {
             showMenu();
 
         };
-
 
     document
         .getElementById("joinRoomButton")
@@ -2255,21 +2054,17 @@ async function joinRoom() {
         .value
         .trim();
 
-
     const roomCode =
         document
         .getElementById("roomCode")
         .value
         .trim();
 
-
     const error =
         document
         .getElementById("joinError");
 
-
     error.textContent = "";
-
 
     if (!name) {
 
@@ -2279,7 +2074,6 @@ async function joinRoom() {
         return;
 
     }
-
 
     if (
         !/^\d{4}$/.test(
@@ -2294,7 +2088,6 @@ async function joinRoom() {
 
     }
 
-
     if (!currentUser) {
 
         error.textContent =
@@ -2303,7 +2096,6 @@ async function joinRoom() {
         return;
 
     }
-
 
     try {
 
@@ -2314,12 +2106,10 @@ async function joinRoom() {
                 roomCode
             );
 
-
         const snapshot =
             await getDoc(
                 roomReference
             );
-
 
         if (!snapshot.exists()) {
 
@@ -2330,10 +2120,8 @@ async function joinRoom() {
 
         }
 
-
         const room =
             snapshot.data();
-
 
         if (room.playerId) {
 
@@ -2344,6 +2132,17 @@ async function joinRoom() {
 
         }
 
+        if (
+            room.hostId ===
+            currentUser.uid
+        ) {
+
+            error.textContent =
+                "You cannot join your own room.";
+
+            return;
+
+        }
 
         await updateDoc(
             roomReference,
@@ -2358,15 +2157,12 @@ async function joinRoom() {
             }
         );
 
-
         currentRoom =
             roomCode;
-
 
         showPlayerRoom(
             roomCode
         );
-
 
         listenToRoom(
             roomCode
@@ -2434,6 +2230,397 @@ function showPlayerRoom(
 }
 
 
+/* LISTEN TO ROOM */
+
+function listenToRoom(
+    roomCode
+) {
+
+    if (roomListener) {
+
+        roomListener();
+
+    }
+
+    roomListener =
+        onSnapshot(
+
+            doc(
+                db,
+                "triviaRooms",
+                roomCode
+            ),
+
+            function(snapshot) {
+
+                if (!snapshot.exists()) {
+
+                    alert(
+                        "This room no longer exists."
+                    );
+
+                    showMenu();
+
+                    return;
+
+                }
+
+                const room =
+                    snapshot.data();
+
+                currentRoom =
+                    roomCode;
+
+                if (
+                    room.hostId ===
+                    currentUser?.uid
+                ) {
+
+                    updateHostView(
+                        room
+                    );
+
+                }
+
+                else {
+
+                    updatePlayerView(
+                        room
+                    );
+
+                }
+
+            },
+
+            function(error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        );
+
+}
+
+
+/* HOST VIEW */
+
+function updateHostView(
+    room
+) {
+
+    const status =
+        document.getElementById(
+            "roomStatus"
+        );
+
+    const area =
+        document.getElementById(
+            "hostQuestionArea"
+        );
+
+    if (!status || !area)
+        return;
+
+    if (!room.playerId) {
+
+        status.innerHTML =
+            "Waiting for the other player...";
+
+        area.innerHTML = `
+
+            <div class="empty">
+                Give the room code to the other player.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    if (
+        room.turn === "player"
+    ) {
+
+        status.innerHTML = `
+
+            It's
+            <span class="player-name">
+                ${escapeHTML(room.playerName)}
+            </span>'s turn to host ❤️
+
+        `;
+
+        area.innerHTML = `
+
+            <div class="turn-banner">
+
+                They are creating the next round.
+
+                <br><br>
+
+                You'll answer their questions when they're ready.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    status.innerHTML = `
+
+        <span class="player-name">
+            ${escapeHTML(room.playerName)}
+        </span>
+
+        joined the room ❤️
+
+    `;
+
+    if (
+        room.status === "waiting"
+    ) {
+
+        area.innerHTML = `
+
+            <div class="turn-banner">
+
+                You're hosting the first round.
+
+            </div>
+
+            <button
+                id="beginGame"
+                class="start-button"
+            >
+                Start Round
+            </button>
+
+        `;
+
+        document
+            .getElementById("beginGame")
+            .onclick =
+            async function() {
+
+                await updateDoc(
+
+                    doc(
+                        db,
+                        "triviaRooms",
+                        currentRoom
+                    ),
+
+                    {
+                        status:
+                            "playing"
+                    }
+
+                );
+
+            };
+
+        return;
+
+    }
+
+    if (
+        room.status === "finished"
+    ) {
+
+        showResults(
+            room
+        );
+
+        return;
+
+    }
+
+    const question =
+        room.questions[
+            room.currentQuestion
+        ];
+
+    if (!question)
+        return;
+
+    renderHostQuestion(
+        room,
+        question,
+        area
+    );
+
+}
+
+
+/* RENDER HOST QUESTION */
+
+function renderHostQuestion(
+    room,
+    question,
+    area
+) {
+
+    area.innerHTML = `
+
+        <div class="score-board">
+
+            <div class="score-box">
+
+                <div class="score-number">
+                    ${room.hostScore}
+                </div>
+
+                <div class="score-name">
+                    You
+                </div>
+
+            </div>
+
+            <div class="score-box">
+
+                <div class="score-number">
+                    ${room.playerScore}
+                </div>
+
+                <div class="score-name">
+                    ${escapeHTML(room.playerName)}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="quiz-question">
+
+            <div class="question-counter">
+
+                Question
+                ${room.currentQuestion + 1}
+                /
+                ${room.questions.length}
+
+            </div>
+
+            <h2>
+                ${escapeHTML(question.question)}
+            </h2>
+
+            <div class="answers">
+
+                ${question.answers
+                    .map(
+                        function(answer, index) {
+
+                            return `
+
+                                <button
+                                    class="answer-button"
+                                    disabled
+                                >
+
+                                    <span
+                                        class="answer-letter"
+                                    >
+                                        ${String.fromCharCode(
+                                            65 + index
+                                        )}
+                                    </span>
+
+                                    ${escapeHTML(answer)}
+
+                                </button>
+
+                            `;
+
+                        }
+                    )
+                    .join("")}
+
+            </div>
+
+            <div class="answer-status">
+
+                ${
+                    room.playerAnswered
+                    ? "They answered! ❤️"
+                    : "Waiting for their answer..."
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+    if (
+        room.playerAnswered
+    ) {
+
+        const selected =
+            room.playerAnswer;
+
+        const buttons =
+            area.querySelectorAll(
+                ".answer-button"
+            );
+
+        if (
+            buttons[selected]
+        ) {
+
+            buttons[selected]
+                .classList.add(
+                    selected ===
+                    question.correct
+                    ? "correct"
+                    : "wrong"
+                );
+
+        }
+
+        setTimeout(
+            async function() {
+
+                const latest =
+                    await getDoc(
+                        doc(
+                            db,
+                            "triviaRooms",
+                            currentRoom
+                        )
+                    );
+
+                if (!latest.exists())
+                    return;
+
+                const latestRoom =
+                    latest.data();
+
+                if (
+                    latestRoom.playerAnswered
+                ) {
+
+                    moveToNextQuestion(
+                        latestRoom
+                    );
+
+                }
+
+            },
+            1200
+        );
+
+    }
+
+}
+
+
 /* PLAYER VIEW */
 
 function updatePlayerView(
@@ -2445,20 +2632,16 @@ function updatePlayerView(
             "playerStatus"
         );
 
-
     const area =
         document.getElementById(
             "playerQuestionArea"
         );
 
-
     if (!status || !area)
         return;
 
-
     if (
-        room.status ===
-        "finished"
+        room.status === "finished"
     ) {
 
         showResults(
@@ -2469,15 +2652,26 @@ function updatePlayerView(
 
     }
 
+    if (
+        room.turn === "player"
+    ) {
+
+        showPlayerHostSetup(
+            room,
+            status,
+            area
+        );
+
+        return;
+
+    }
 
     if (
-        room.status ===
-        "waiting"
+        room.status === "waiting"
     ) {
 
         status.innerHTML =
             "Waiting for the host to start...";
-
 
         area.innerHTML = `
 
@@ -2491,25 +2685,466 @@ function updatePlayerView(
 
     }
 
+    status.innerHTML = `
 
-    status.innerHTML =
-        `You're playing against
+        You're playing against
         <span class="player-name">
-            ${escapeHTML(
-                room.hostName
-            )}
-        </span>`;
+            ${escapeHTML(room.hostName)}
+        </span>
 
+    `;
 
     const question =
         room.questions[
             room.currentQuestion
         ];
 
-
     if (!question)
         return;
 
+    renderPlayerQuestion(
+        room,
+        question,
+        area
+    );
+
+}
+
+
+/* PLAYER CREATES THEIR TURN */
+
+function showPlayerHostSetup(
+    room,
+    status,
+    area
+) {
+
+    status.innerHTML = `
+
+        It's your turn to host ❤️
+
+    `;
+
+    area.innerHTML = `
+
+        <div class="turn-banner">
+
+            Make the questions.
+
+            <br>
+
+            They will answer them.
+
+        </div>
+
+        <div class="mode-choice">
+
+            <button
+                class="mode-button"
+                id="playerRandomRound"
+            >
+
+                <div class="mode-title">
+                    🎲 Random Questions
+                </div>
+
+                <div class="mode-description">
+                    Give them a random trivia round.
+                </div>
+
+            </button>
+
+            <button
+                class="mode-button"
+                id="playerPersonalRound"
+            >
+
+                <div class="mode-title">
+                    ❤️ Personal Questions
+                </div>
+
+                <div class="mode-description">
+                    Make your own questions and choose the answers.
+                </div>
+
+            </button>
+
+        </div>
+
+    `;
+
+    document
+        .getElementById("playerRandomRound")
+        .onclick =
+        async function() {
+
+            const randomQuestions =
+                createRandomQuestions(5);
+
+            await startPlayerTurn(
+                randomQuestions
+            );
+
+        };
+
+    document
+        .getElementById("playerPersonalRound")
+        .onclick =
+        function() {
+
+            showPlayerPersonalCreator(
+                room,
+                status,
+                area
+            );
+
+        };
+
+}
+
+
+/* PLAYER PERSONAL CREATOR */
+
+function showPlayerPersonalCreator(
+    room,
+    status,
+    area
+) {
+
+    let playerQuestions = [];
+
+    function render() {
+
+        area.innerHTML = `
+
+            <div class="question-box">
+
+                <input
+                    id="playerQuestion"
+                    type="text"
+                    placeholder="Write your question..."
+                >
+
+                <input
+                    id="playerAnswer1"
+                    type="text"
+                    placeholder="Answer 1"
+                >
+
+                <input
+                    id="playerAnswer2"
+                    type="text"
+                    placeholder="Answer 2"
+                >
+
+                <input
+                    id="playerAnswer3"
+                    type="text"
+                    placeholder="Answer 3"
+                >
+
+                <input
+                    id="playerAnswer4"
+                    type="text"
+                    placeholder="Answer 4"
+                >
+
+                <select id="playerCorrectAnswer">
+
+                    <option value="">
+                        Choose the correct answer
+                    </option>
+
+                    <option value="0">
+                        Answer 1
+                    </option>
+
+                    <option value="1">
+                        Answer 2
+                    </option>
+
+                    <option value="2">
+                        Answer 3
+                    </option>
+
+                    <option value="3">
+                        Answer 4
+                    </option>
+
+                </select>
+
+                <button id="playerAddQuestion">
+                    + Add Question
+                </button>
+
+            </div>
+
+            <div class="questions-title">
+                Your Questions
+            </div>
+
+            <div id="playerQuestionList"></div>
+
+            <button
+                class="start-button"
+                id="playerStartRound"
+            >
+                Start Their Round
+            </button>
+
+        `;
+
+        const list =
+            document.getElementById(
+                "playerQuestionList"
+            );
+
+        if (
+            playerQuestions.length === 0
+        ) {
+
+            list.innerHTML = `
+
+                <div class="empty">
+                    No questions yet.
+                </div>
+
+            `;
+
+        }
+
+        playerQuestions.forEach(
+            function(item, index) {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+                card.className =
+                    "question-card";
+
+                card.innerHTML = `
+
+                    <div class="question-number">
+                        Question ${index + 1}
+                    </div>
+
+                    <div class="question-text">
+                        ${escapeHTML(item.question)}
+                    </div>
+
+                    <div class="answer-line">
+
+                        A. ${escapeHTML(item.answers[0])}
+                        <br>
+
+                        B. ${escapeHTML(item.answers[1])}
+                        <br>
+
+                        C. ${escapeHTML(item.answers[2])}
+                        <br>
+
+                        D. ${escapeHTML(item.answers[3])}
+
+                    </div>
+
+                    <button
+                        class="delete-question"
+                    >
+                        Delete Question
+                    </button>
+
+                `;
+
+                card
+                    .querySelector(
+                        ".delete-question"
+                    )
+                    .onclick =
+                    function() {
+
+                        playerQuestions.splice(
+                            index,
+                            1
+                        );
+
+                        render();
+
+                    };
+
+                list.appendChild(card);
+
+            }
+        );
+
+        document
+            .getElementById("playerAddQuestion")
+            .onclick =
+            function() {
+
+                const question =
+                    document
+                    .getElementById("playerQuestion")
+                    .value
+                    .trim();
+
+                const answers = [
+
+                    document
+                    .getElementById("playerAnswer1")
+                    .value
+                    .trim(),
+
+                    document
+                    .getElementById("playerAnswer2")
+                    .value
+                    .trim(),
+
+                    document
+                    .getElementById("playerAnswer3")
+                    .value
+                    .trim(),
+
+                    document
+                    .getElementById("playerAnswer4")
+                    .value
+                    .trim()
+
+                ];
+
+                const correct =
+                    document
+                    .getElementById(
+                        "playerCorrectAnswer"
+                    )
+                    .value;
+
+                if (
+                    !question ||
+                    answers.some(
+                        answer => !answer
+                    ) ||
+                    correct === ""
+                ) {
+
+                    alert(
+                        "Fill everything in first ❤️"
+                    );
+
+                    return;
+
+                }
+
+                playerQuestions.push({
+
+                    question:
+                        question,
+
+                    answers:
+                        answers,
+
+                    correct:
+                        Number(correct)
+
+                });
+
+                render();
+
+            };
+
+        document
+            .getElementById("playerStartRound")
+            .onclick =
+            async function() {
+
+                if (
+                    playerQuestions.length === 0
+                ) {
+
+                    alert(
+                        "Add at least one question first ❤️"
+                    );
+
+                    return;
+
+                }
+
+                await startPlayerTurn(
+                    playerQuestions
+                );
+
+            };
+
+    }
+
+    render();
+
+}
+
+
+/* START PLAYER TURN */
+
+async function startPlayerTurn(
+    playerQuestions
+) {
+
+    try {
+
+        await updateDoc(
+
+            doc(
+                db,
+                "triviaRooms",
+                currentRoom
+            ),
+
+            {
+
+                questions:
+                    playerQuestions,
+
+                currentQuestion:
+                    0,
+
+                playerAnswer:
+                    null,
+
+                playerAnswered:
+                    false,
+
+                status:
+                    "playing",
+
+                turn:
+                    "player"
+
+            }
+
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "Could not start the round."
+        );
+
+    }
+
+}
+
+
+/* PLAYER QUESTION */
+
+function renderPlayerQuestion(
+    room,
+    question,
+    area
+) {
 
     area.innerHTML = `
 
@@ -2534,9 +3169,7 @@ function updatePlayerView(
                 </div>
 
                 <div class="score-name">
-                    ${escapeHTML(
-                        room.hostName
-                    )}
+                    ${escapeHTML(room.hostName)}
                 </div>
 
             </div>
@@ -2555,9 +3188,7 @@ function updatePlayerView(
             </div>
 
             <h2>
-                ${escapeHTML(
-                    question.question
-                )}
+                ${escapeHTML(question.question)}
             </h2>
 
             <div
@@ -2589,9 +3220,7 @@ function updatePlayerView(
                                         )}
                                     </span>
 
-                                    ${escapeHTML(
-                                        answer
-                                    )}
+                                    ${escapeHTML(answer)}
 
                                 </button>
 
@@ -2617,7 +3246,6 @@ function updatePlayerView(
 
     `;
 
-
     area
         .querySelectorAll(
             ".answer-button"
@@ -2628,18 +3256,20 @@ function updatePlayerView(
                 button.onclick =
                     function() {
 
-                        submitAnswer(
+                        submitPlayerAnswer(
+
                             Number(
                                 button.dataset.answer
                             ),
+
                             room
+
                         );
 
                     };
 
             }
         );
-
 
     if (
         room.playerAnswered &&
@@ -2651,23 +3281,20 @@ function updatePlayerView(
                 ".answer-button"
             );
 
-
         const selected =
             room.playerAnswer;
-
 
         if (
             buttons[selected]
         ) {
 
-            buttons[
-                selected
-            ].classList.add(
-                selected ===
-                question.correct
-                ? "correct"
-                : "wrong"
-            );
+            buttons[selected]
+                .classList.add(
+                    selected ===
+                    question.correct
+                    ? "correct"
+                    : "wrong"
+                );
 
         }
 
@@ -2678,7 +3305,7 @@ function updatePlayerView(
 
 /* SUBMIT ANSWER */
 
-async function submitAnswer(
+async function submitPlayerAnswer(
     answer,
     room
 ) {
@@ -2688,40 +3315,251 @@ async function submitAnswer(
     )
         return;
 
-
     const question =
         room.questions[
             room.currentQuestion
         ];
 
-
     const correct =
         answer ===
         question.correct;
 
-
     try {
 
+        const scoreField =
+            room.turn === "host"
+            ? "playerScore"
+            : "hostScore";
+
+        const currentScore =
+            room.turn === "host"
+            ? room.playerScore
+            : room.hostScore;
+
+        const update = {
+
+            playerAnswer:
+                answer,
+
+            playerAnswered:
+                true
+
+        };
+
+        update[scoreField] =
+            correct
+            ? currentScore + 1
+            : currentScore;
+
         await updateDoc(
+
             doc(
                 db,
                 "triviaRooms",
                 currentRoom
             ),
-            {
 
-                playerAnswer:
-                    answer,
+            update
 
-                playerAnswered:
-                    true,
+        );
 
-                playerScore:
-                    correct
-                    ? room.playerScore + 1
-                    : room.playerScore
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* MOVE TO NEXT QUESTION / TURN */
+
+async function moveToNextQuestion(
+    room
+) {
+
+    if (advancing)
+        return;
+
+    advancing = true;
+
+    try {
+
+        if (
+            room.currentQuestion + 1 <
+            room.questions.length
+        ) {
+
+            await updateDoc(
+
+                doc(
+                    db,
+                    "triviaRooms",
+                    currentRoom
+                ),
+
+                {
+
+                    currentQuestion:
+                        room.currentQuestion + 1,
+
+                    playerAnswer:
+                        null,
+
+                    playerAnswered:
+                        false
+
+                }
+
+            );
+
+        }
+
+        else {
+
+            /*
+             * First host turn finished.
+             * Give the player their turn.
+             */
+
+            if (
+                room.turn === "host"
+            ) {
+
+                await updateDoc(
+
+                    doc(
+                        db,
+                        "triviaRooms",
+                        currentRoom
+                    ),
+
+                    {
+
+                        turn:
+                            "player",
+
+                        status:
+                            "playing",
+
+                        questions:
+                            [],
+
+                        currentQuestion:
+                            0,
+
+                        playerAnswer:
+                            null,
+
+                        playerAnswered:
+                            false,
+
+                        roundNumber:
+                            (room.roundNumber || 1) + 1
+
+                    }
+
+                );
 
             }
+
+            else {
+
+                /*
+                 * Both players have hosted.
+                 * Finish the match.
+                 */
+
+                await updateDoc(
+
+                    doc(
+                        db,
+                        "triviaRooms",
+                        currentRoom
+                    ),
+
+                    {
+
+                        status:
+                            "finished",
+
+                        playerAnswer:
+                            null,
+
+                        playerAnswered:
+                            false
+
+                    }
+
+                );
+
+                saveScoreHistory(
+                    room
+                );
+
+            }
+
+        }
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+    }
+
+    setTimeout(
+        function() {
+
+            advancing = false;
+
+        },
+        500
+    );
+
+}
+
+
+/* SAVE SCORE HISTORY */
+
+async function saveScoreHistory(
+    room
+) {
+
+    if (!currentUser)
+        return;
+
+    try {
+
+        await addDoc(
+
+            collection(
+                db,
+                "triviaScores"
+            ),
+
+            {
+
+                hostName:
+                    room.hostName,
+
+                playerName:
+                    room.playerName,
+
+                hostScore:
+                    room.hostScore,
+
+                playerScore:
+                    room.playerScore,
+
+                finishedAt:
+                    Date.now()
+
+            }
+
         );
 
     }
@@ -2729,6 +3567,7 @@ async function submitAnswer(
     catch(error) {
 
         console.error(
+            "Could not save score history:",
             error
         );
 
@@ -2749,13 +3588,11 @@ function showResults(
         ? room.hostScore
         : room.playerScore;
 
-
     const opponentScore =
         currentUser?.uid ===
         room.hostId
         ? room.playerScore
         : room.hostScore;
-
 
     const myName =
         currentUser?.uid ===
@@ -2763,16 +3600,13 @@ function showResults(
         ? room.hostName
         : room.playerName;
 
-
     const opponentName =
         currentUser?.uid ===
         room.hostId
         ? room.playerName
         : room.hostName;
 
-
     let result;
-
 
     if (
         myScore >
@@ -2801,7 +3635,6 @@ function showResults(
 
     }
 
-
     container.innerHTML = `
 
         <div class="heart">
@@ -2825,9 +3658,7 @@ function showResults(
                 </div>
 
                 <div class="score-name">
-                    ${escapeHTML(
-                        myName
-                    )}
+                    ${escapeHTML(myName)}
                 </div>
 
             </div>
@@ -2839,9 +3670,7 @@ function showResults(
                 </div>
 
                 <div class="score-name">
-                    ${escapeHTML(
-                        opponentName
-                    )}
+                    ${escapeHTML(opponentName)}
                 </div>
 
             </div>
@@ -2856,7 +3685,6 @@ function showResults(
         </button>
 
     `;
-
 
     document
         .getElementById("backHome")
@@ -2879,6 +3707,10 @@ function showMenu() {
 
     }
 
+    currentRoom =
+        null;
+
+    questions = [];
 
     container.innerHTML = `
 
@@ -2919,12 +3751,10 @@ function showMenu() {
 
     `;
 
-
     document
         .getElementById("hostButton")
         .onclick =
-        showHostScreen;
-
+        showHostSetup;
 
     document
         .getElementById("joinButton")
@@ -2939,11 +3769,39 @@ function showMenu() {
 function generateRoomCode() {
 
     return String(
+
         Math.floor(
             1000 +
             Math.random() * 9000
         )
+
     );
+
+}
+
+
+/* USER NAME */
+
+function getUserName() {
+
+    if (
+        currentUser?.displayName
+    ) {
+
+        return currentUser.displayName;
+
+    }
+
+    if (
+        currentUser?.email
+    ) {
+
+        return currentUser.email
+            .split("@")[0];
+
+    }
+
+    return "Player";
 
 }
 
@@ -2960,7 +3818,7 @@ function escapeHTML(
         );
 
     div.textContent =
-        text;
+        String(text);
 
     return div.innerHTML;
 
