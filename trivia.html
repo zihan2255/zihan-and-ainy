@@ -1,0 +1,2796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Zihan & Ainy — Trivia</title>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 12% 18%,
+            rgba(255,255,255,.12),
+            transparent 2%
+        ),
+        radial-gradient(
+            circle at 78% 24%,
+            rgba(255,255,255,.10),
+            transparent 1.5%
+        ),
+        radial-gradient(
+            circle at 35% 70%,
+            rgba(255,255,255,.08),
+            transparent 2%
+        ),
+        radial-gradient(
+            circle at 90% 82%,
+            rgba(255,255,255,.09),
+            transparent 1.5%
+        ),
+        linear-gradient(
+            180deg,
+            #050816,
+            #0c1024,
+            #171936
+        );
+
+    color: #eeeaf4;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    padding: 30px 0;
+
+}
+
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+        radial-gradient(
+            white 1px,
+            transparent 1px
+        );
+
+    background-size: 85px 85px;
+
+    opacity: .18;
+
+}
+
+
+.container {
+
+    position: relative;
+
+    z-index: 1;
+
+    width: min(92%, 600px);
+
+    margin: auto;
+
+    padding: 45px 30px;
+
+    text-align: center;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 70px
+        rgba(0,0,0,.4);
+
+    backdrop-filter:
+        blur(14px);
+
+}
+
+
+.back {
+
+    position: absolute;
+
+    top: 20px;
+
+    left: 20px;
+
+    color: #aaa4b8;
+
+    text-decoration: none;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.back:hover {
+
+    color: white;
+
+}
+
+
+.heart {
+
+    font-size: 38px;
+
+    margin-bottom: 5px;
+
+    color: #e7b8ca;
+
+}
+
+
+h1 {
+
+    margin:
+        5px 0 8px;
+
+    font-size: 48px;
+
+    font-weight: normal;
+
+}
+
+
+.subtitle {
+
+    margin-bottom: 35px;
+
+    color: #aaa3b6;
+
+    font-style: italic;
+
+}
+
+
+.menu {
+
+    display: grid;
+
+    gap: 15px;
+
+}
+
+
+button {
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    color: white;
+
+    padding: 15px 20px;
+
+    cursor: pointer;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+
+    transition: .2s ease;
+
+}
+
+
+button:hover {
+
+    background:
+        rgba(255,255,255,.16);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+button:disabled {
+
+    opacity: .45;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+
+.note {
+
+    margin-top: 30px;
+
+    color: #777188;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* INPUTS */
+
+
+input,
+select {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,.07);
+
+    color: white;
+
+    outline: none;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 13px;
+
+}
+
+
+input::placeholder {
+
+    color: #858092;
+
+}
+
+
+input:focus,
+select:focus {
+
+    border-color:
+        rgba(255,255,255,.3);
+
+}
+
+
+select option {
+
+    color: black;
+
+}
+
+
+/* QUESTION CREATOR */
+
+
+.question-box {
+
+    display: grid;
+
+    gap: 10px;
+
+    text-align: left;
+
+}
+
+
+.questions-title {
+
+    margin-top: 35px;
+
+    margin-bottom: 15px;
+
+    color: #aaa3b6;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.question-card {
+
+    margin-top: 12px;
+
+    padding: 18px;
+
+    text-align: left;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius: 10px;
+
+}
+
+
+.question-number {
+
+    color: #cda6b7;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+
+}
+
+
+.question-text {
+
+    font-size: 18px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.answer-line {
+
+    color: #b2acbb;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+
+}
+
+
+.correct-answer {
+
+    margin-top: 10px;
+
+    color: #d4b6c5;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+
+}
+
+
+.delete-question {
+
+    margin-top: 12px;
+
+    padding:
+        8px 12px;
+
+    font-size: 9px;
+
+    background:
+        rgba(255,80,100,.08);
+
+    color: #d9aab4;
+
+}
+
+
+.start-button {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 16px;
+
+    background:
+        rgba(231,184,202,.14);
+
+}
+
+
+/* ROOM CODE */
+
+
+.room-code {
+
+    margin: 20px 0;
+
+    padding: 20px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border-radius: 12px;
+
+}
+
+
+.room-code-label {
+
+    font-family: Arial, sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    color: #91899e;
+
+}
+
+
+.room-code-number {
+
+    margin-top: 8px;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 36px;
+
+    letter-spacing: 8px;
+
+    color: #e7b8ca;
+
+}
+
+
+.status {
+
+    margin: 15px 0;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    color: #aaa3b6;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+
+}
+
+
+.player-name {
+
+    color: #e7b8ca;
+
+}
+
+
+/* QUIZ */
+
+
+.quiz-question {
+
+    margin:
+        25px 0;
+
+    padding: 25px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border-radius: 12px;
+
+}
+
+
+.question-counter {
+
+    color: #938b9f;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 15px;
+
+}
+
+
+.quiz-question h2 {
+
+    font-size: 27px;
+
+    font-weight: normal;
+
+    line-height: 1.4;
+
+}
+
+
+.answers {
+
+    display: grid;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+}
+
+
+.answer-button {
+
+    text-align: left;
+
+    padding: 16px;
+
+    font-size: 12px;
+
+}
+
+
+.answer-button.selected {
+
+    background:
+        rgba(231,184,202,.22);
+
+    border-color:
+        rgba(231,184,202,.4);
+
+}
+
+
+.answer-button.correct {
+
+    background:
+        rgba(100,190,130,.2);
+
+}
+
+
+.answer-button.wrong {
+
+    background:
+        rgba(220,90,100,.2);
+
+}
+
+
+.answer-letter {
+
+    display: inline-block;
+
+    width: 25px;
+
+    color: #d6aebe;
+
+}
+
+
+/* SCORE */
+
+
+.score-board {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 30px;
+
+    margin: 20px 0;
+
+}
+
+
+.score-box {
+
+    min-width: 110px;
+
+    padding: 15px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border-radius: 10px;
+
+}
+
+
+.score-number {
+
+    font-size: 28px;
+
+}
+
+
+.score-name {
+
+    margin-top: 5px;
+
+    color: #9d96a7;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+}
+
+
+.answer-status {
+
+    margin-top: 20px;
+
+    color: #aaa3b6;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+
+}
+
+
+.empty {
+
+    color: #777188;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+
+    margin-top: 15px;
+
+}
+
+
+.error {
+
+    color: #d99da9;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+
+    margin-top: 15px;
+
+}
+
+
+/* MOBILE */
+
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding: 15px 0;
+
+    }
+
+    .container {
+
+        width: 94%;
+
+        padding:
+            40px 20px;
+
+    }
+
+    h1 {
+
+        font-size: 38px;
+
+    }
+
+    .room-code-number {
+
+        font-size: 28px;
+
+        letter-spacing: 5px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div
+    class="container"
+    id="app"
+>
+
+
+<a
+    class="back"
+    href="index.html"
+>
+    ← Back
+</a>
+
+
+<div class="heart">
+    ♥
+</div>
+
+
+<h1>
+    Trivia
+</h1>
+
+
+<p class="subtitle">
+    How well do you know each other?
+</p>
+
+
+<div class="menu">
+
+
+<button id="hostButton">
+    Host a Round
+</button>
+
+
+<button id="joinButton">
+    Join a Round
+</button>
+
+
+</div>
+
+
+<div class="note">
+    A little game for just the two of us
+</div>
+
+
+</div>
+
+
+<script type="module">
+
+
+/* FIREBASE */
+
+
+import {
+    initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+import {
+    getAuth,
+    onAuthStateChanged
+}
+from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    updateDoc,
+    onSnapshot,
+    deleteDoc
+}
+from
+"https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCs6bRbvBM0qx2gj85MBAuhc2S4zaWC-KE",
+
+    authDomain:
+        "zihan-and-ainy.firebaseapp.com",
+
+    projectId:
+        "zihan-and-ainy",
+
+    storageBucket:
+        "zihan-and-ainy.firebasestorage.app",
+
+    messagingSenderId:
+        "481324175476",
+
+    appId:
+        "1:481324175476:web:bf3759bb4ce5323348c121",
+
+    measurementId:
+        "G-C02ZD7G2TE"
+
+};
+
+
+const app =
+    initializeApp(
+        firebaseConfig
+    );
+
+
+const auth =
+    getAuth(app);
+
+
+const db =
+    getFirestore(app);
+
+
+const container =
+    document.getElementById(
+        "app"
+    );
+
+
+let currentUser = null;
+
+let currentRoom = null;
+
+let roomListener = null;
+
+let questions = [];
+
+let selectedAnswer = null;
+
+
+/* AUTH */
+
+
+onAuthStateChanged(
+    auth,
+    function(user) {
+
+        currentUser = user;
+
+    }
+);
+
+
+/* MAIN MENU */
+
+
+document
+    .getElementById("hostButton")
+    .onclick =
+    showHostScreen;
+
+
+document
+    .getElementById("joinButton")
+    .onclick =
+    showJoinScreen;
+
+
+/* HOST SCREEN */
+
+
+function showHostScreen() {
+
+    questions = [];
+
+    container.innerHTML = `
+
+        <a
+            class="back"
+            href="#"
+            id="backButton"
+        >
+            ← Back
+        </a>
+
+        <div class="heart">
+            ♥
+        </div>
+
+        <h1>
+            Host a Round
+        </h1>
+
+        <p class="subtitle">
+            Create your questions
+        </p>
+
+
+        <div class="question-box">
+
+
+            <input
+                id="question"
+                type="text"
+                placeholder="Write your question..."
+            >
+
+
+            <input
+                id="answer1"
+                type="text"
+                placeholder="Answer 1"
+            >
+
+
+            <input
+                id="answer2"
+                type="text"
+                placeholder="Answer 2"
+            >
+
+
+            <input
+                id="answer3"
+                type="text"
+                placeholder="Answer 3"
+            >
+
+
+            <input
+                id="answer4"
+                type="text"
+                placeholder="Answer 4"
+            >
+
+
+            <select
+                id="correctAnswer"
+            >
+
+                <option value="">
+                    Choose the correct answer
+                </option>
+
+                <option value="0">
+                    Answer 1
+                </option>
+
+                <option value="1">
+                    Answer 2
+                </option>
+
+                <option value="2">
+                    Answer 3
+                </option>
+
+                <option value="3">
+                    Answer 4
+                </option>
+
+            </select>
+
+
+            <button
+                id="addQuestion"
+            >
+                + Add Question
+            </button>
+
+
+        </div>
+
+
+        <div class="questions-title">
+            Your Questions
+        </div>
+
+
+        <div id="questionList"></div>
+
+
+        <button
+            class="start-button"
+            id="startRound"
+        >
+            Create Room
+        </button>
+
+    `;
+
+
+    document
+        .getElementById("backButton")
+        .onclick =
+        function(event) {
+
+            event.preventDefault();
+
+            showMenu();
+
+        };
+
+
+    document
+        .getElementById("addQuestion")
+        .onclick =
+        addQuestion;
+
+
+    document
+        .getElementById("startRound")
+        .onclick =
+        createRoom;
+
+
+    renderQuestions();
+
+}
+
+
+/* ADD QUESTION */
+
+
+function addQuestion() {
+
+    const question =
+        document
+        .getElementById("question")
+        .value
+        .trim();
+
+
+    const answers = [
+
+        document
+        .getElementById("answer1")
+        .value
+        .trim(),
+
+        document
+        .getElementById("answer2")
+        .value
+        .trim(),
+
+        document
+        .getElementById("answer3")
+        .value
+        .trim(),
+
+        document
+        .getElementById("answer4")
+        .value
+        .trim()
+
+    ];
+
+
+    const correct =
+        document
+        .getElementById("correctAnswer")
+        .value;
+
+
+    if (
+        !question ||
+        answers.some(
+            answer => !answer
+        ) ||
+        correct === ""
+    ) {
+
+        alert(
+            "Fill everything in first ❤️"
+        );
+
+        return;
+
+    }
+
+
+    questions.push({
+
+        question:
+            question,
+
+        answers:
+            answers,
+
+        correct:
+            Number(correct)
+
+    });
+
+
+    document
+        .getElementById("question")
+        .value = "";
+
+
+    for (
+        let i = 1;
+        i <= 4;
+        i++
+    ) {
+
+        document
+        .getElementById(
+            "answer" + i
+        )
+        .value = "";
+
+    }
+
+
+    document
+        .getElementById("correctAnswer")
+        .value = "";
+
+
+    renderQuestions();
+
+}
+
+
+/* DISPLAY QUESTIONS */
+
+
+function renderQuestions() {
+
+    const list =
+        document
+        .getElementById("questionList");
+
+
+    if (!list) return;
+
+
+    list.innerHTML = "";
+
+
+    if (
+        questions.length === 0
+    ) {
+
+        list.innerHTML = `
+            <div class="empty">
+                No questions yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    questions.forEach(
+        function(item, index) {
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "question-card";
+
+
+            card.innerHTML = `
+
+                <div class="question-number">
+                    Question ${index + 1}
+                </div>
+
+                <div class="question-text">
+                    ${escapeHTML(
+                        item.question
+                    )}
+                </div>
+
+                <div class="answer-line">
+
+                    1.
+                    ${escapeHTML(
+                        item.answers[0]
+                    )}
+
+                    <br>
+
+                    2.
+                    ${escapeHTML(
+                        item.answers[1]
+                    )}
+
+                    <br>
+
+                    3.
+                    ${escapeHTML(
+                        item.answers[2]
+                    )}
+
+                    <br>
+
+                    4.
+                    ${escapeHTML(
+                        item.answers[3]
+                    )}
+
+                </div>
+
+                <div class="correct-answer">
+
+                    ✓ Correct:
+                    Answer ${item.correct + 1}
+
+                </div>
+
+                <button
+                    class="delete-question"
+                    data-index="${index}"
+                >
+                    Delete Question
+                </button>
+
+            `;
+
+
+            card
+                .querySelector(
+                    ".delete-question"
+                )
+                .onclick =
+                function() {
+
+                    questions.splice(
+                        index,
+                        1
+                    );
+
+                    renderQuestions();
+
+                };
+
+
+            list.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* CREATE ROOM */
+
+
+async function createRoom() {
+
+    if (
+        questions.length === 0
+    ) {
+
+        alert(
+            "Add at least one question first ❤️"
+        );
+
+        return;
+
+    }
+
+
+    if (!currentUser) {
+
+        alert(
+            "You need to be logged in first."
+        );
+
+        return;
+
+    }
+
+
+    const roomCode =
+        generateRoomCode();
+
+
+    const room = {
+
+        hostId:
+            currentUser.uid,
+
+        hostName:
+            currentUser.email
+            ? currentUser.email.split("@")[0]
+            : "Host",
+
+        playerId:
+            "",
+
+        playerName:
+            "",
+
+        questions:
+            questions,
+
+        currentQuestion:
+            0,
+
+        hostScore:
+            0,
+
+        playerScore:
+            0,
+
+        playerAnswer:
+            null,
+
+        playerAnswered:
+            false,
+
+        status:
+            "waiting",
+
+        createdAt:
+            Date.now()
+
+    };
+
+
+    try {
+
+        await setDoc(
+            doc(
+                db,
+                "triviaRooms",
+                roomCode
+            ),
+            room
+        );
+
+
+        currentRoom =
+            roomCode;
+
+
+        showHostRoom(
+            roomCode
+        );
+
+
+        listenToRoom(
+            roomCode
+        );
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "Could not create the room. Check your Firebase rules."
+        );
+
+    }
+
+}
+
+
+/* HOST ROOM */
+
+
+function showHostRoom(
+    roomCode
+) {
+
+    container.innerHTML = `
+
+        <div class="heart">
+            ♥
+        </div>
+
+        <h1>
+            Your Round
+        </h1>
+
+        <p class="subtitle">
+            Send this code to the other player
+        </p>
+
+
+        <div class="room-code">
+
+            <div class="room-code-label">
+                ROOM CODE
+            </div>
+
+            <div class="room-code-number">
+                ${roomCode}
+            </div>
+
+        </div>
+
+
+        <div
+            class="status"
+            id="roomStatus"
+        >
+            Waiting for the other player...
+        </div>
+
+
+        <div
+            id="hostQuestionArea"
+        >
+
+            <div class="empty">
+                Once they join, the round will begin.
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* LISTEN TO ROOM */
+
+
+function listenToRoom(
+    roomCode
+) {
+
+    if (roomListener) {
+
+        roomListener();
+
+    }
+
+
+    roomListener =
+        onSnapshot(
+
+            doc(
+                db,
+                "triviaRooms",
+                roomCode
+            ),
+
+            function(snapshot) {
+
+                if (!snapshot.exists()) {
+
+                    alert(
+                        "This room no longer exists."
+                    );
+
+                    showMenu();
+
+                    return;
+
+                }
+
+
+                const room =
+                    snapshot.data();
+
+
+                currentRoom =
+                    roomCode;
+
+
+                if (
+                    room.hostId ===
+                    currentUser?.uid
+                ) {
+
+                    updateHostView(
+                        room
+                    );
+
+                }
+                else {
+
+                    updatePlayerView(
+                        room
+                    );
+
+                }
+
+            },
+
+            function(error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        );
+
+}
+
+
+/* HOST VIEW */
+
+
+function updateHostView(
+    room
+) {
+
+    const status =
+        document.getElementById(
+            "roomStatus"
+        );
+
+
+    const area =
+        document.getElementById(
+            "hostQuestionArea"
+        );
+
+
+    if (!status || !area)
+        return;
+
+
+    if (!room.playerId) {
+
+        status.innerHTML =
+            "Waiting for the other player...";
+
+        area.innerHTML = `
+
+            <div class="empty">
+                Give the room code to the other player.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    status.innerHTML =
+        `<span class="player-name">
+            ${escapeHTML(
+                room.playerName
+            )}
+        </span>
+        joined the room ❤️`;
+
+
+    if (
+        room.status ===
+        "waiting"
+    ) {
+
+        area.innerHTML = `
+
+            <button
+                id="beginGame"
+                class="start-button"
+            >
+                Start Round
+            </button>
+
+        `;
+
+
+        document
+            .getElementById("beginGame")
+            .onclick =
+            async function() {
+
+                await updateDoc(
+                    doc(
+                        db,
+                        "triviaRooms",
+                        currentRoom
+                    ),
+                    {
+                        status:
+                            "playing"
+                    }
+                );
+
+            };
+
+
+        return;
+
+    }
+
+
+    if (
+        room.status ===
+        "finished"
+    ) {
+
+        showResults(
+            room
+        );
+
+        return;
+
+    }
+
+
+    const question =
+        room.questions[
+            room.currentQuestion
+        ];
+
+
+    if (!question)
+        return;
+
+
+    area.innerHTML = `
+
+        <div class="score-board">
+
+            <div class="score-box">
+
+                <div class="score-number">
+                    ${room.hostScore}
+                </div>
+
+                <div class="score-name">
+                    You
+                </div>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <div class="score-number">
+                    ${room.playerScore}
+                </div>
+
+                <div class="score-name">
+                    ${escapeHTML(
+                        room.playerName
+                    )}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="quiz-question">
+
+            <div class="question-counter">
+                Question
+                ${room.currentQuestion + 1}
+                /
+                ${room.questions.length}
+            </div>
+
+
+            <h2>
+                ${escapeHTML(
+                    question.question
+                )}
+            </h2>
+
+
+            <div class="answers">
+
+                ${question.answers
+                    .map(
+                        function(answer, index) {
+
+                            return `
+
+                                <button
+                                    class="answer-button"
+                                    disabled
+                                >
+
+                                    <span
+                                        class="answer-letter"
+                                    >
+                                        ${String.fromCharCode(
+                                            65 + index
+                                        )}
+                                    </span>
+
+                                    ${escapeHTML(
+                                        answer
+                                    )}
+
+                                </button>
+
+                            `;
+
+                        }
+                    )
+                    .join("")}
+
+            </div>
+
+
+            <div class="answer-status">
+
+                ${
+                    room.playerAnswered
+                    ? "The other player has answered! ❤️"
+                    : "Waiting for their answer..."
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    if (
+        room.playerAnswered
+    ) {
+
+        const selected =
+            room.playerAnswer;
+
+
+        const buttons =
+            area.querySelectorAll(
+                ".answer-button"
+            );
+
+
+        if (
+            buttons[selected]
+        ) {
+
+            buttons[
+                selected
+            ].classList.add(
+                selected ===
+                question.correct
+                ? "correct"
+                : "wrong"
+            );
+
+        }
+
+
+        setTimeout(
+            async function() {
+
+                const latest =
+                    await getDoc(
+                        doc(
+                            db,
+                            "triviaRooms",
+                            currentRoom
+                        )
+                    );
+
+
+                if (!latest.exists())
+                    return;
+
+
+                const latestRoom =
+                    latest.data();
+
+
+                if (
+                    latestRoom.playerAnswered
+                ) {
+
+                    moveToNextQuestion(
+                        latestRoom
+                    );
+
+                }
+
+            },
+            1200
+        );
+
+    }
+
+}
+
+
+/* MOVE NEXT QUESTION */
+
+
+let advancing = false;
+
+
+async function moveToNextQuestion(
+    room
+) {
+
+    if (advancing)
+        return;
+
+
+    advancing = true;
+
+
+    try {
+
+        if (
+            room.currentQuestion + 1 >=
+            room.questions.length
+        ) {
+
+            await updateDoc(
+                doc(
+                    db,
+                    "triviaRooms",
+                    currentRoom
+                ),
+                {
+                    status:
+                        "finished"
+                }
+            );
+
+        }
+
+        else {
+
+            await updateDoc(
+                doc(
+                    db,
+                    "triviaRooms",
+                    currentRoom
+                ),
+                {
+
+                    currentQuestion:
+                        room.currentQuestion + 1,
+
+                    playerAnswer:
+                        null,
+
+                    playerAnswered:
+                        false
+
+                }
+            );
+
+        }
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+    }
+
+
+    setTimeout(
+        function() {
+
+            advancing = false;
+
+        },
+        500
+    );
+
+}
+
+
+/* JOIN SCREEN */
+
+
+function showJoinScreen() {
+
+    container.innerHTML = `
+
+        <a
+            class="back"
+            href="#"
+            id="backButton"
+        >
+            ← Back
+        </a>
+
+
+        <div class="heart">
+            ♥
+        </div>
+
+
+        <h1>
+            Join a Round
+        </h1>
+
+
+        <p class="subtitle">
+            Enter the room code
+        </p>
+
+
+        <div class="question-box">
+
+
+            <input
+                id="playerName"
+                type="text"
+                placeholder="Your name"
+                maxlength="20"
+            >
+
+
+            <input
+                id="roomCode"
+                type="text"
+                placeholder="4-digit room code"
+                maxlength="4"
+                inputmode="numeric"
+            >
+
+
+            <button
+                id="joinRoomButton"
+            >
+                Join Round
+            </button>
+
+
+        </div>
+
+
+        <div
+            id="joinError"
+            class="error"
+        ></div>
+
+    `;
+
+
+    document
+        .getElementById("backButton")
+        .onclick =
+        function(event) {
+
+            event.preventDefault();
+
+            showMenu();
+
+        };
+
+
+    document
+        .getElementById("joinRoomButton")
+        .onclick =
+        joinRoom;
+
+}
+
+
+/* JOIN ROOM */
+
+
+async function joinRoom() {
+
+    const name =
+        document
+        .getElementById("playerName")
+        .value
+        .trim();
+
+
+    const roomCode =
+        document
+        .getElementById("roomCode")
+        .value
+        .trim();
+
+
+    const error =
+        document
+        .getElementById("joinError");
+
+
+    error.textContent = "";
+
+
+    if (!name) {
+
+        error.textContent =
+            "Enter your name.";
+
+        return;
+
+    }
+
+
+    if (
+        !/^\d{4}$/.test(
+            roomCode
+        )
+    ) {
+
+        error.textContent =
+            "Room code must be 4 numbers.";
+
+        return;
+
+    }
+
+
+    if (!currentUser) {
+
+        error.textContent =
+            "You need to be logged in first.";
+
+        return;
+
+    }
+
+
+    try {
+
+        const roomReference =
+            doc(
+                db,
+                "triviaRooms",
+                roomCode
+            );
+
+
+        const snapshot =
+            await getDoc(
+                roomReference
+            );
+
+
+        if (!snapshot.exists()) {
+
+            error.textContent =
+                "That room doesn't exist.";
+
+            return;
+
+        }
+
+
+        const room =
+            snapshot.data();
+
+
+        if (room.playerId) {
+
+            error.textContent =
+                "That room already has a player.";
+
+            return;
+
+        }
+
+
+        await updateDoc(
+            roomReference,
+            {
+
+                playerId:
+                    currentUser.uid,
+
+                playerName:
+                    name
+
+            }
+        );
+
+
+        currentRoom =
+            roomCode;
+
+
+        showPlayerRoom(
+            roomCode
+        );
+
+
+        listenToRoom(
+            roomCode
+        );
+
+    }
+
+    catch(errorObject) {
+
+        console.error(
+            errorObject
+        );
+
+        error.textContent =
+            "Could not join the room.";
+
+    }
+
+}
+
+
+/* PLAYER ROOM */
+
+
+function showPlayerRoom(
+    roomCode
+) {
+
+    container.innerHTML = `
+
+        <div class="heart">
+            ♥
+        </div>
+
+        <h1>
+            You're In
+        </h1>
+
+        <p class="subtitle">
+            Waiting for the host...
+        </p>
+
+
+        <div class="room-code">
+
+            <div class="room-code-label">
+                ROOM
+            </div>
+
+            <div class="room-code-number">
+                ${roomCode}
+            </div>
+
+        </div>
+
+
+        <div
+            class="status"
+            id="playerStatus"
+        >
+            Waiting for the host to start...
+        </div>
+
+
+        <div id="playerQuestionArea"></div>
+
+    `;
+
+}
+
+
+/* PLAYER VIEW */
+
+
+function updatePlayerView(
+    room
+) {
+
+    const status =
+        document.getElementById(
+            "playerStatus"
+        );
+
+
+    const area =
+        document.getElementById(
+            "playerQuestionArea"
+        );
+
+
+    if (!status || !area)
+        return;
+
+
+    if (
+        room.status ===
+        "finished"
+    ) {
+
+        showResults(
+            room
+        );
+
+        return;
+
+    }
+
+
+    if (
+        room.status ===
+        "waiting"
+    ) {
+
+        status.innerHTML =
+            "Waiting for the host to start...";
+
+
+        area.innerHTML = `
+            <div class="empty">
+                Get ready ❤️
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    status.innerHTML =
+        `You're playing against
+        <span class="player-name">
+            ${escapeHTML(
+                room.hostName
+            )}
+        </span>`;
+
+
+    const question =
+        room.questions[
+            room.currentQuestion
+        ];
+
+
+    if (!question)
+        return;
+
+
+    area.innerHTML = `
+
+        <div class="score-board">
+
+            <div class="score-box">
+
+                <div class="score-number">
+                    ${room.playerScore}
+                </div>
+
+                <div class="score-name">
+                    You
+                </div>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <div class="score-number">
+                    ${room.hostScore}
+                </div>
+
+                <div class="score-name">
+                    ${escapeHTML(
+                        room.hostName
+                    )}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="quiz-question">
+
+            <div class="question-counter">
+
+                Question
+                ${room.currentQuestion + 1}
+                /
+                ${room.questions.length}
+
+            </div>
+
+
+            <h2>
+                ${escapeHTML(
+                    question.question
+                )}
+            </h2>
+
+
+            <div
+                class="answers"
+                id="answerButtons"
+            >
+
+                ${question.answers
+                    .map(
+                        function(answer, index) {
+
+                            return `
+
+                                <button
+                                    class="answer-button"
+                                    data-answer="${index}"
+                                    ${
+                                        room.playerAnswered
+                                        ? "disabled"
+                                        : ""
+                                    }
+                                >
+
+                                    <span
+                                        class="answer-letter"
+                                    >
+                                        ${String.fromCharCode(
+                                            65 + index
+                                        )}
+                                    </span>
+
+                                    ${escapeHTML(
+                                        answer
+                                    )}
+
+                                </button>
+
+                            `;
+
+                        }
+                    )
+                    .join("")}
+
+            </div>
+
+
+            <div class="answer-status">
+
+                ${
+                    room.playerAnswered
+                    ? "Answer submitted. ❤️"
+                    : "Choose your answer."
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    area
+        .querySelectorAll(
+            ".answer-button"
+        )
+        .forEach(
+            function(button) {
+
+                button.onclick =
+                    function() {
+
+                        submitAnswer(
+                            Number(
+                                button.dataset.answer
+                            ),
+                            room
+                        );
+
+                    };
+
+            }
+        );
+
+
+    if (
+        room.playerAnswered &&
+        room.playerAnswer !== null
+    ) {
+
+        const buttons =
+            area.querySelectorAll(
+                ".answer-button"
+            );
+
+
+        const selected =
+            room.playerAnswer;
+
+
+        if (
+            buttons[selected]
+        ) {
+
+            buttons[
+                selected
+            ].classList.add(
+                selected ===
+                question.correct
+                ? "correct"
+                : "wrong"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* SUBMIT ANSWER */
+
+
+async function submitAnswer(
+    answer,
+    room
+) {
+
+    if (
+        room.playerAnswered
+    )
+        return;
+
+
+    const question =
+        room.questions[
+            room.currentQuestion
+        ];
+
+
+    const correct =
+        answer ===
+        question.correct;
+
+
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                "triviaRooms",
+                currentRoom
+            ),
+            {
+
+                playerAnswer:
+                    answer,
+
+                playerAnswered:
+                    true,
+
+                playerScore:
+                    correct
+                    ? room.playerScore + 1
+                    : room.playerScore
+
+            }
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+/* RESULTS */
+
+
+function showResults(
+    room
+) {
+
+    const myScore =
+        currentUser?.uid ===
+        room.hostId
+        ? room.hostScore
+        : room.playerScore;
+
+
+    const opponentScore =
+        currentUser?.uid ===
+        room.hostId
+        ? room.playerScore
+        : room.hostScore;
+
+
+    const myName =
+        currentUser?.uid ===
+        room.hostId
+        ? room.hostName
+        : room.playerName;
+
+
+    const opponentName =
+        currentUser?.uid ===
+        room.hostId
+        ? room.playerName
+        : room.hostName;
+
+
+    let result;
+
+
+    if (
+        myScore >
+        opponentScore
+    ) {
+
+        result =
+            "You win! 🏆❤️";
+
+    }
+
+    else if (
+        myScore <
+        opponentScore
+    ) {
+
+        result =
+            "They win! ❤️";
+
+    }
+
+    else {
+
+        result =
+            "It's a tie! 🤝";
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="heart">
+            ♥
+        </div>
+
+
+        <h1>
+            Round Complete
+        </h1>
+
+
+        <p class="subtitle">
+            ${result}
+        </p>
+
+
+        <div class="score-board">
+
+
+            <div class="score-box">
+
+                <div class="score-number">
+                    ${myScore}
+                </div>
+
+                <div class="score-name">
+                    ${escapeHTML(
+                        myName
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <div class="score-number">
+                    ${opponentScore}
+                </div>
+
+                <div class="score-name">
+                    ${escapeHTML(
+                        opponentName
+                    )}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <button
+            id="backHome"
+            class="start-button"
+        >
+            Back to Trivia
+        </button>
+
+    `;
+
+
+    document
+        .getElementById("backHome")
+        .onclick =
+        showMenu;
+
+}
+
+
+/* MENU */
+
+
+function showMenu() {
+
+    if (roomListener) {
+
+        roomListener();
+
+        roomListener =
+            null;
+
+    }
+
+
+    container.innerHTML = `
+
+        <a
+            class="back"
+            href="index.html"
+        >
+            ← Back
+        </a>
+
+
+        <div class="heart">
+            ♥
+        </div>
+
+
+        <h1>
+            Trivia
+        </h1>
+
+
+        <p class="subtitle">
+            How well do you know each other?
+        </p>
+
+
+        <div class="menu">
+
+
+            <button id="hostButton">
+                Host a Round
+            </button>
+
+
+            <button id="joinButton">
+                Join a Round
+            </button>
+
+
+        </div>
+
+
+        <div class="note">
+            A little game for just the two of us
+        </div>
+
+    `;
+
+
+    document
+        .getElementById("hostButton")
+        .onclick =
+        showHostScreen;
+
+
+    document
+        .getElementById("joinButton")
+        .onclick =
+        showJoinScreen;
+
+}
+
+
+/* ROOM CODE */
+
+
+function generateRoomCode() {
+
+    return String(
+        Math.floor(
+            1000 +
+            Math.random() * 9000
+        )
+    );
+
+}
+
+
+/* ESCAPE HTML */
+
+
+function escapeHTML(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
