@@ -692,6 +692,7 @@ select option {
 
         letter-spacing: 5px;
     }
+
 }
 
 </style>
@@ -2305,11 +2306,11 @@ function listenToRoom(
 }
 
 
-/* HOST VIEW */
+/* =========================================================
+   HOST VIEW
+   ========================================================= */
 
-function updateHostView(
-    room
-) {
+function updateHostView(room) {
 
     const status =
         document.getElementById(
@@ -2323,6 +2324,9 @@ function updateHostView(
 
     if (!status || !area)
         return;
+
+
+    /* WAITING FOR PLAYER */
 
     if (!room.playerId) {
 
@@ -2341,6 +2345,19 @@ function updateHostView(
 
     }
 
+
+    /*
+     * IMPORTANT
+     *
+     * room.turn tells us who is currently HOSTING.
+     *
+     * "host"   = original host is hosting
+     * "player" = original player is hosting
+     */
+
+
+    /* PLAYER IS CURRENT HOST */
+
     if (
         room.turn === "player"
     ) {
@@ -2350,9 +2367,53 @@ function updateHostView(
             It's
             <span class="player-name">
                 ${escapeHTML(room.playerName)}
-            </span>'s turn to host ❤️
+            </span>
+            's turn to host ❤️
 
         `;
+
+
+        /*
+         * The original host is now the ANSWERER.
+         *
+         * This is the important part that was missing.
+         */
+
+        if (
+            room.status === "playing" &&
+            room.questions &&
+            room.questions.length > 0
+        ) {
+
+            status.innerHTML = `
+
+                You're answering
+                <span class="player-name">
+                    ${escapeHTML(room.playerName)}
+                </span>
+                's questions ❤️
+
+            `;
+
+            const question =
+                room.questions[
+                    room.currentQuestion
+                ];
+
+            if (question) {
+
+                renderPlayerQuestion(
+                    room,
+                    question,
+                    area
+                );
+
+            }
+
+            return;
+
+        }
+
 
         area.innerHTML = `
 
@@ -2372,6 +2433,9 @@ function updateHostView(
 
     }
 
+
+    /* ORIGINAL HOST IS CURRENT HOST */
+
     status.innerHTML = `
 
         <span class="player-name">
@@ -2381,6 +2445,9 @@ function updateHostView(
         joined the room ❤️
 
     `;
+
+
+    /* FIRST ROUND WAITING */
 
     if (
         room.status === "waiting"
@@ -2403,31 +2470,63 @@ function updateHostView(
 
         `;
 
-        document
-            .getElementById("beginGame")
-            .onclick =
-            async function() {
+        const beginButton =
+            document.getElementById(
+                "beginGame"
+            );
 
-                await updateDoc(
+        if (beginButton) {
 
-                    doc(
-                        db,
-                        "triviaRooms",
-                        currentRoom
-                    ),
+            beginButton.onclick =
+                async function() {
 
-                    {
-                        status:
-                            "playing"
+                    beginButton.disabled =
+                        true;
+
+                    try {
+
+                        await updateDoc(
+
+                            doc(
+                                db,
+                                "triviaRooms",
+                                currentRoom
+                            ),
+
+                            {
+                                status:
+                                    "playing"
+                            }
+
+                        );
+
                     }
 
-                );
+                    catch(error) {
 
-            };
+                        console.error(
+                            error
+                        );
+
+                        beginButton.disabled =
+                            false;
+
+                        alert(
+                            "Could not start the round."
+                        );
+
+                    }
+
+                };
+
+        }
 
         return;
 
     }
+
+
+    /* FINISHED */
 
     if (
         room.status === "finished"
@@ -2441,30 +2540,73 @@ function updateHostView(
 
     }
 
-    const question =
-        room.questions[
-            room.currentQuestion
-        ];
 
-    if (!question)
-        return;
+    /* PLAYING */
 
-    renderHostQuestion(
-        room,
-        question,
-        area
-    );
+    if (
+        room.status === "playing"
+    ) {
+
+        const question =
+            room.questions?.[
+                room.currentQuestion
+            ];
+
+        if (!question)
+            return;
+
+        renderHostQuestion(
+            room,
+            question,
+            area
+        );
+
+    }
 
 }
 
 
-/* RENDER HOST QUESTION */
+/* =========================================================
+   RENDER HOST QUESTION
+   ========================================================= */
 
 function renderHostQuestion(
     room,
     question,
     area
 ) {
+
+    /*
+     * If the current host is the original player,
+     * their score is playerScore.
+     *
+     * If the current host is the original host,
+     * their score is hostScore.
+     */
+
+    const currentHostIsPlayer =
+        room.turn === "player";
+
+    const currentHostScore =
+        currentHostIsPlayer
+        ? room.playerScore
+        : room.hostScore;
+
+    const currentAnswererScore =
+        currentHostIsPlayer
+        ? room.hostScore
+        : room.playerScore;
+
+    const currentHostName =
+        currentHostIsPlayer
+        ? room.playerName
+        : room.hostName;
+
+    const currentAnswererName =
+        currentHostIsPlayer
+        ? room.hostName
+        : room.playerName;
+
 
     area.innerHTML = `
 
@@ -2473,11 +2615,11 @@ function renderHostQuestion(
             <div class="score-box">
 
                 <div class="score-number">
-                    ${room.hostScore}
+                    ${currentHostScore}
                 </div>
 
                 <div class="score-name">
-                    You
+                    ${escapeHTML(currentHostName)}
                 </div>
 
             </div>
@@ -2485,16 +2627,17 @@ function renderHostQuestion(
             <div class="score-box">
 
                 <div class="score-number">
-                    ${room.playerScore}
+                    ${currentAnswererScore}
                 </div>
 
                 <div class="score-name">
-                    ${escapeHTML(room.playerName)}
+                    ${escapeHTML(currentAnswererName)}
                 </div>
 
             </div>
 
         </div>
+
 
         <div class="quiz-question">
 
@@ -2558,8 +2701,14 @@ function renderHostQuestion(
 
     `;
 
+
+    /*
+     * Show which answer they selected.
+     */
+
     if (
-        room.playerAnswered
+        room.playerAnswered &&
+        room.playerAnswer !== null
     ) {
 
         const selected =
@@ -2576,56 +2725,77 @@ function renderHostQuestion(
 
             buttons[selected]
                 .classList.add(
+
                     selected ===
                     question.correct
+
                     ? "correct"
+
                     : "wrong"
+
                 );
 
         }
 
-        setTimeout(
-            async function() {
 
-                const latest =
-                    await getDoc(
-                        doc(
-                            db,
-                            "triviaRooms",
-                            currentRoom
-                        )
-                    );
+        /*
+         * Only the CURRENT HOST advances the round.
+         */
 
-                if (!latest.exists())
-                    return;
+        if (
+            room.turn ===
+            (
+                room.hostId ===
+                currentUser?.uid
+                ? "host"
+                : "player"
+            )
+        ) {
 
-                const latestRoom =
-                    latest.data();
+            setTimeout(
+                async function() {
 
-                if (
-                    latestRoom.playerAnswered
-                ) {
+                    const latest =
+                        await getDoc(
+                            doc(
+                                db,
+                                "triviaRooms",
+                                currentRoom
+                            )
+                        );
 
-                    moveToNextQuestion(
-                        latestRoom
-                    );
+                    if (!latest.exists())
+                        return;
 
-                }
+                    const latestRoom =
+                        latest.data();
 
-            },
-            1200
-        );
+                    if (
+                        latestRoom.playerAnswered
+                    ) {
+
+                        moveToNextQuestion(
+                            latestRoom
+                        );
+
+                    }
+
+                },
+                1200
+            );
+
+        }
 
     }
 
 }
 
 
-/* PLAYER VIEW */
+/* =========================================================
+   PLAYER VIEW
+   ========================================================= */
 
-function updatePlayerView(
-    room
-) {
+function updatePlayerView(room) {
 
     const status =
         document.getElementById(
@@ -2640,6 +2810,9 @@ function updatePlayerView(
     if (!status || !area)
         return;
 
+
+    /* FINISHED */
+
     if (
         room.status === "finished"
     ) {
@@ -2652,19 +2825,96 @@ function updatePlayerView(
 
     }
 
+
+    /*
+     * The original player is the CURRENT HOST
+     * when turn === "player".
+     */
+
+
     if (
         room.turn === "player"
     ) {
 
-        showPlayerHostSetup(
+        /*
+         * CRITICAL FIX:
+         *
+         * If the player has NOT started their round yet,
+         * show the creator.
+         *
+         * If they HAVE started it,
+         * status === "playing" and questions exist,
+         * so show the HOST screen instead.
+         */
+
+        if (
+            room.status !== "playing" ||
+            !room.questions ||
+            room.questions.length === 0
+        ) {
+
+            showPlayerHostSetup(
+                room,
+                status,
+                area
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * PLAYER IS NOW HOSTING.
+         */
+
+        status.innerHTML = `
+
+            You're hosting this round ❤️
+
+            <br>
+
+            <span class="player-name">
+                ${escapeHTML(room.hostName)}
+            </span>
+
+            is answering.
+
+        `;
+
+
+        const question =
+            room.questions[
+                room.currentQuestion
+            ];
+
+        if (!question) {
+
+            area.innerHTML = `
+
+                <div class="empty">
+                    Waiting for the round to load...
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        renderHostQuestion(
             room,
-            status,
+            question,
             area
         );
 
         return;
 
     }
+
+
+    /* ORIGINAL PLAYER IS ANSWERING */
 
     if (
         room.status === "waiting"
@@ -2685,33 +2935,42 @@ function updatePlayerView(
 
     }
 
-    status.innerHTML = `
 
-        You're playing against
-        <span class="player-name">
-            ${escapeHTML(room.hostName)}
-        </span>
+    if (
+        room.status === "playing"
+    ) {
 
-    `;
+        status.innerHTML = `
 
-    const question =
-        room.questions[
-            room.currentQuestion
-        ];
+            You're playing against
+            <span class="player-name">
+                ${escapeHTML(room.hostName)}
+            </span>
 
-    if (!question)
-        return;
+        `;
 
-    renderPlayerQuestion(
-        room,
-        question,
-        area
-    );
+        const question =
+            room.questions[
+                room.currentQuestion
+            ];
+
+        if (!question)
+            return;
+
+        renderPlayerQuestion(
+            room,
+            question,
+            area
+        );
+
+    }
 
 }
 
 
-/* PLAYER CREATES THEIR TURN */
+/* =========================================================
+   PLAYER CREATES THEIR TURN
+   ========================================================= */
 
 function showPlayerHostSetup(
     room,
@@ -2773,37 +3032,59 @@ function showPlayerHostSetup(
 
     `;
 
-    document
-        .getElementById("playerRandomRound")
-        .onclick =
-        async function() {
 
-            const randomQuestions =
-                createRandomQuestions(5);
+    const randomButton =
+        document.getElementById(
+            "playerRandomRound"
+        );
 
-            await startPlayerTurn(
-                randomQuestions
-            );
+    const personalButton =
+        document.getElementById(
+            "playerPersonalRound"
+        );
 
-        };
 
-    document
-        .getElementById("playerPersonalRound")
-        .onclick =
-        function() {
+    if (randomButton) {
 
-            showPlayerPersonalCreator(
-                room,
-                status,
-                area
-            );
+        randomButton.onclick =
+            async function() {
 
-        };
+                randomButton.disabled =
+                    true;
+
+                const randomQuestions =
+                    createRandomQuestions(5);
+
+                await startPlayerTurn(
+                    randomQuestions
+                );
+
+            };
+
+    }
+
+
+    if (personalButton) {
+
+        personalButton.onclick =
+            function() {
+
+                showPlayerPersonalCreator(
+                    room,
+                    status,
+                    area
+                );
+
+            };
+
+    }
 
 }
 
 
-/* PLAYER PERSONAL CREATOR */
+/* =========================================================
+   PLAYER PERSONAL CREATOR
+   ========================================================= */
 
 function showPlayerPersonalCreator(
     room,
@@ -2813,7 +3094,15 @@ function showPlayerPersonalCreator(
 
     let playerQuestions = [];
 
+
     function render() {
+
+        status.innerHTML = `
+
+            It's your turn to host ❤️
+
+        `;
+
 
         area.innerHTML = `
 
@@ -2849,7 +3138,9 @@ function showPlayerPersonalCreator(
                     placeholder="Answer 4"
                 >
 
-                <select id="playerCorrectAnswer">
+                <select
+                    id="playerCorrectAnswer"
+                >
 
                     <option value="">
                         Choose the correct answer
@@ -2873,17 +3164,22 @@ function showPlayerPersonalCreator(
 
                 </select>
 
-                <button id="playerAddQuestion">
+                <button
+                    id="playerAddQuestion"
+                >
                     + Add Question
                 </button>
 
             </div>
 
+
             <div class="questions-title">
                 Your Questions
             </div>
 
+
             <div id="playerQuestionList"></div>
+
 
             <button
                 class="start-button"
@@ -2894,10 +3190,12 @@ function showPlayerPersonalCreator(
 
         `;
 
+
         const list =
             document.getElementById(
                 "playerQuestionList"
             );
+
 
         if (
             playerQuestions.length === 0
@@ -2912,6 +3210,7 @@ function showPlayerPersonalCreator(
             `;
 
         }
+
 
         playerQuestions.forEach(
             function(item, index) {
@@ -2949,6 +3248,15 @@ function showPlayerPersonalCreator(
 
                     </div>
 
+                    <div class="correct-answer">
+
+                        ✓ Correct:
+                        ${String.fromCharCode(
+                            65 + item.correct
+                        )}
+
+                    </div>
+
                     <button
                         class="delete-question"
                     >
@@ -2956,6 +3264,7 @@ function showPlayerPersonalCreator(
                     </button>
 
                 `;
+
 
                 card
                     .querySelector(
@@ -2973,45 +3282,67 @@ function showPlayerPersonalCreator(
 
                     };
 
-                list.appendChild(card);
+
+                list.appendChild(
+                    card
+                );
 
             }
         );
 
+
+        /*
+         * ADD QUESTION
+         */
+
         document
-            .getElementById("playerAddQuestion")
+            .getElementById(
+                "playerAddQuestion"
+            )
             .onclick =
             function() {
 
                 const question =
                     document
-                    .getElementById("playerQuestion")
+                    .getElementById(
+                        "playerQuestion"
+                    )
                     .value
                     .trim();
+
 
                 const answers = [
 
                     document
-                    .getElementById("playerAnswer1")
+                    .getElementById(
+                        "playerAnswer1"
+                    )
                     .value
                     .trim(),
 
                     document
-                    .getElementById("playerAnswer2")
+                    .getElementById(
+                        "playerAnswer2"
+                    )
                     .value
                     .trim(),
 
                     document
-                    .getElementById("playerAnswer3")
+                    .getElementById(
+                        "playerAnswer3"
+                    )
                     .value
                     .trim(),
 
                     document
-                    .getElementById("playerAnswer4")
+                    .getElementById(
+                        "playerAnswer4"
+                    )
                     .value
                     .trim()
 
                 ];
+
 
                 const correct =
                     document
@@ -3019,6 +3350,7 @@ function showPlayerPersonalCreator(
                         "playerCorrectAnswer"
                     )
                     .value;
+
 
                 if (
                     !question ||
@@ -3036,6 +3368,7 @@ function showPlayerPersonalCreator(
 
                 }
 
+
                 playerQuestions.push({
 
                     question:
@@ -3049,12 +3382,20 @@ function showPlayerPersonalCreator(
 
                 });
 
+
                 render();
 
             };
 
+
+        /*
+         * START THEIR ROUND
+         */
+
         document
-            .getElementById("playerStartRound")
+            .getElementById(
+                "playerStartRound"
+            )
             .onclick =
             async function() {
 
@@ -3070,6 +3411,16 @@ function showPlayerPersonalCreator(
 
                 }
 
+
+                const startButton =
+                    document.getElementById(
+                        "playerStartRound"
+                    );
+
+                startButton.disabled =
+                    true;
+
+
                 await startPlayerTurn(
                     playerQuestions
                 );
@@ -3078,16 +3429,33 @@ function showPlayerPersonalCreator(
 
     }
 
+
     render();
 
 }
 
 
-/* START PLAYER TURN */
+/* =========================================================
+   START PLAYER TURN
+   ========================================================= */
 
 async function startPlayerTurn(
     playerQuestions
 ) {
+
+    if (
+        !playerQuestions ||
+        playerQuestions.length === 0
+    ) {
+
+        alert(
+            "Add at least one question first ❤️"
+        );
+
+        return;
+
+    }
+
 
     try {
 
@@ -3127,10 +3495,12 @@ async function startPlayerTurn(
 
     catch(error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         alert(
-            "Could not start the round."
+            "Could not start the round. Check your Firebase rules."
         );
 
     }
@@ -3138,13 +3508,39 @@ async function startPlayerTurn(
 }
 
 
-/* PLAYER QUESTION */
+/* =========================================================
+   PLAYER QUESTION
+   ========================================================= */
 
 function renderPlayerQuestion(
     room,
     question,
     area
 ) {
+
+    /*
+     * Determine whose score belongs to the person
+     * currently answering.
+     */
+
+    const answeringIsOriginalPlayer =
+        room.turn === "host";
+
+    const myScore =
+        answeringIsOriginalPlayer
+        ? room.playerScore
+        : room.hostScore;
+
+    const opponentScore =
+        answeringIsOriginalPlayer
+        ? room.hostScore
+        : room.playerScore;
+
+    const opponentName =
+        answeringIsOriginalPlayer
+        ? room.hostName
+        : room.playerName;
+
 
     area.innerHTML = `
 
@@ -3153,7 +3549,7 @@ function renderPlayerQuestion(
             <div class="score-box">
 
                 <div class="score-number">
-                    ${room.playerScore}
+                    ${myScore}
                 </div>
 
                 <div class="score-name">
@@ -3165,16 +3561,17 @@ function renderPlayerQuestion(
             <div class="score-box">
 
                 <div class="score-number">
-                    ${room.hostScore}
+                    ${opponentScore}
                 </div>
 
                 <div class="score-name">
-                    ${escapeHTML(room.hostName)}
+                    ${escapeHTML(opponentName)}
                 </div>
 
             </div>
 
         </div>
+
 
         <div class="quiz-question">
 
@@ -3190,6 +3587,7 @@ function renderPlayerQuestion(
             <h2>
                 ${escapeHTML(question.question)}
             </h2>
+
 
             <div
                 class="answers"
@@ -3232,6 +3630,7 @@ function renderPlayerQuestion(
 
             </div>
 
+
             <div class="answer-status">
 
                 ${
@@ -3245,6 +3644,11 @@ function renderPlayerQuestion(
         </div>
 
     `;
+
+
+    /*
+     * Answer buttons
+     */
 
     area
         .querySelectorAll(
@@ -3271,6 +3675,11 @@ function renderPlayerQuestion(
             }
         );
 
+
+    /*
+     * Show selected answer
+     */
+
     if (
         room.playerAnswered &&
         room.playerAnswer !== null
@@ -3290,10 +3699,14 @@ function renderPlayerQuestion(
 
             buttons[selected]
                 .classList.add(
+
                     selected ===
                     question.correct
+
                     ? "correct"
+
                     : "wrong"
+
                 );
 
         }
@@ -3303,7 +3716,9 @@ function renderPlayerQuestion(
 }
 
 
-/* SUBMIT ANSWER */
+/* =========================================================
+   SUBMIT ANSWER
+   ========================================================= */
 
 async function submitPlayerAnswer(
     answer,
@@ -3315,26 +3730,38 @@ async function submitPlayerAnswer(
     )
         return;
 
+
     const question =
         room.questions[
             room.currentQuestion
         ];
 
+
     const correct =
         answer ===
         question.correct;
 
+
     try {
+
+        /*
+         * The person answering is always:
+         *
+         * playerScore when host is hosting
+         * hostScore when player is hosting
+         */
 
         const scoreField =
             room.turn === "host"
             ? "playerScore"
             : "hostScore";
 
+
         const currentScore =
             room.turn === "host"
             ? room.playerScore
             : room.hostScore;
+
 
         const update = {
 
@@ -3346,10 +3773,12 @@ async function submitPlayerAnswer(
 
         };
 
+
         update[scoreField] =
             correct
             ? currentScore + 1
             : currentScore;
+
 
         await updateDoc(
 
@@ -3367,14 +3796,18 @@ async function submitPlayerAnswer(
 
     catch(error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
     }
 
 }
 
 
-/* MOVE TO NEXT QUESTION / TURN */
+/* =========================================================
+   MOVE TO NEXT QUESTION / TURN
+   ========================================================= */
 
 async function moveToNextQuestion(
     room
@@ -3383,9 +3816,15 @@ async function moveToNextQuestion(
     if (advancing)
         return;
 
+
     advancing = true;
 
+
     try {
+
+        /*
+         * MORE QUESTIONS IN THIS TURN
+         */
 
         if (
             room.currentQuestion + 1 <
@@ -3417,11 +3856,18 @@ async function moveToNextQuestion(
 
         }
 
+
+        /*
+         * THIS TURN IS FINISHED
+         */
+
         else {
 
+
             /*
-             * First host turn finished.
-             * Give the player their turn.
+             * ORIGINAL HOST FINISHED.
+             *
+             * Now original player becomes host.
              */
 
             if (
@@ -3465,12 +3911,14 @@ async function moveToNextQuestion(
 
             }
 
-            else {
 
-                /*
-                 * Both players have hosted.
-                 * Finish the match.
-                 */
+            /*
+             * ORIGINAL PLAYER FINISHED.
+             *
+             * Both players have now hosted.
+             */
+
+            else {
 
                 await updateDoc(
 
@@ -3495,6 +3943,7 @@ async function moveToNextQuestion(
 
                 );
 
+
                 saveScoreHistory(
                     room
                 );
@@ -3507,9 +3956,12 @@ async function moveToNextQuestion(
 
     catch(error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
     }
+
 
     setTimeout(
         function() {
@@ -3523,7 +3975,9 @@ async function moveToNextQuestion(
 }
 
 
-/* SAVE SCORE HISTORY */
+/* =========================================================
+   SAVE SCORE HISTORY
+   ========================================================= */
 
 async function saveScoreHistory(
     room
@@ -3531,6 +3985,7 @@ async function saveScoreHistory(
 
     if (!currentUser)
         return;
+
 
     try {
 
@@ -3576,7 +4031,9 @@ async function saveScoreHistory(
 }
 
 
-/* RESULTS */
+/* =========================================================
+   RESULTS
+   ========================================================= */
 
 function showResults(
     room
@@ -3588,11 +4045,13 @@ function showResults(
         ? room.hostScore
         : room.playerScore;
 
+
     const opponentScore =
         currentUser?.uid ===
         room.hostId
         ? room.playerScore
         : room.hostScore;
+
 
     const myName =
         currentUser?.uid ===
@@ -3600,13 +4059,16 @@ function showResults(
         ? room.hostName
         : room.playerName;
 
+
     const opponentName =
         currentUser?.uid ===
         room.hostId
         ? room.playerName
         : room.hostName;
 
+
     let result;
+
 
     if (
         myScore >
@@ -3635,6 +4097,7 @@ function showResults(
 
     }
 
+
     container.innerHTML = `
 
         <div class="heart">
@@ -3648,6 +4111,7 @@ function showResults(
         <p class="subtitle">
             ${result}
         </p>
+
 
         <div class="score-board">
 
@@ -3663,6 +4127,7 @@ function showResults(
 
             </div>
 
+
             <div class="score-box">
 
                 <div class="score-number">
@@ -3677,6 +4142,7 @@ function showResults(
 
         </div>
 
+
         <button
             id="backHome"
             class="start-button"
@@ -3686,6 +4152,7 @@ function showResults(
 
     `;
 
+
     document
         .getElementById("backHome")
         .onclick =
@@ -3694,7 +4161,9 @@ function showResults(
 }
 
 
-/* MENU */
+/* =========================================================
+   MENU
+   ========================================================= */
 
 function showMenu() {
 
@@ -3707,10 +4176,17 @@ function showMenu() {
 
     }
 
+
     currentRoom =
         null;
 
+
     questions = [];
+
+
+    advancing =
+        false;
+
 
     container.innerHTML = `
 
@@ -3751,10 +4227,12 @@ function showMenu() {
 
     `;
 
+
     document
         .getElementById("hostButton")
         .onclick =
         showHostSetup;
+
 
     document
         .getElementById("joinButton")
@@ -3764,7 +4242,9 @@ function showMenu() {
 }
 
 
-/* ROOM CODE */
+/* =========================================================
+   ROOM CODE
+   ========================================================= */
 
 function generateRoomCode() {
 
@@ -3780,7 +4260,9 @@ function generateRoomCode() {
 }
 
 
-/* USER NAME */
+/* =========================================================
+   USER NAME
+   ========================================================= */
 
 function getUserName() {
 
@@ -3792,6 +4274,7 @@ function getUserName() {
 
     }
 
+
     if (
         currentUser?.email
     ) {
@@ -3801,12 +4284,15 @@ function getUserName() {
 
     }
 
+
     return "Player";
 
 }
 
 
-/* ESCAPE HTML */
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
 
 function escapeHTML(
     text
