@@ -743,9 +743,13 @@ select option {
 
 </div>
 
+
 <script type="module">
 
-/* FIREBASE */
+
+/* =========================================================
+   FIREBASE
+========================================================= */
 
 import {
     initializeApp
@@ -801,9 +805,7 @@ const firebaseConfig = {
 
 
 const app =
-    initializeApp(
-        firebaseConfig
-    );
+    initializeApp(firebaseConfig);
 
 const auth =
     getAuth(app);
@@ -826,7 +828,9 @@ let questions = [];
 let advancing = false;
 
 
-/* RANDOM QUESTION BANK */
+/* =========================================================
+   RANDOM QUESTIONS
+========================================================= */
 
 const randomQuestionBank = [
 
@@ -1284,7 +1288,9 @@ const randomQuestionBank = [
 ];
 
 
-/* AUTH */
+/* =========================================================
+   AUTH
+========================================================= */
 
 onAuthStateChanged(
     auth,
@@ -1296,7 +1302,9 @@ onAuthStateChanged(
 );
 
 
-/* MAIN MENU */
+/* =========================================================
+   MAIN MENU
+========================================================= */
 
 document
     .getElementById("hostButton")
@@ -1309,7 +1317,9 @@ document
     showJoinScreen;
 
 
-/* HOST SETUP */
+/* =========================================================
+   HOST SETUP
+========================================================= */
 
 function showHostSetup() {
 
@@ -1347,7 +1357,7 @@ function showHostSetup() {
                 </div>
 
                 <div class="mode-description">
-                    Questions are chosen randomly from the trivia bank.
+                    5 questions are chosen randomly.
                 </div>
 
             </button>
@@ -1387,35 +1397,24 @@ function showHostSetup() {
         .onclick =
         function() {
 
-            showRandomSetup();
+            questions =
+                createRandomQuestions(5);
+
+            createRoom();
 
         };
 
     document
         .getElementById("personalMode")
         .onclick =
-        function() {
-
-            showPersonalSetup();
-
-        };
+        showPersonalSetup;
 
 }
 
 
-/* RANDOM SETUP */
-
-function showRandomSetup() {
-
-    questions =
-        createRandomQuestions(5);
-
-    createRoom();
-
-}
-
-
-/* PERSONAL SETUP */
+/* =========================================================
+   PERSONAL HOST SETUP
+========================================================= */
 
 function showPersonalSetup() {
 
@@ -1546,7 +1545,9 @@ function showPersonalSetup() {
 }
 
 
-/* ADD PERSONAL QUESTION */
+/* =========================================================
+   ADD HOST QUESTION
+========================================================= */
 
 function addQuestion() {
 
@@ -1641,7 +1642,9 @@ function addQuestion() {
 }
 
 
-/* DISPLAY QUESTIONS */
+/* =========================================================
+   RENDER HOST QUESTIONS
+========================================================= */
 
 function renderQuestions() {
 
@@ -1707,7 +1710,9 @@ function renderQuestions() {
                 <div class="correct-answer">
 
                     ✓ Correct:
-                    ${String.fromCharCode(65 + item.correct)}
+                    ${String.fromCharCode(
+                        65 + item.correct
+                    )}
 
                 </div>
 
@@ -1743,7 +1748,9 @@ function renderQuestions() {
 }
 
 
-/* CREATE RANDOM QUESTIONS */
+/* =========================================================
+   RANDOM QUESTION CREATOR
+========================================================= */
 
 function createRandomQuestions(amount) {
 
@@ -1784,7 +1791,9 @@ function createRandomQuestions(amount) {
 }
 
 
-/* CREATE ROOM */
+/* =========================================================
+   CREATE ROOM
+========================================================= */
 
 async function createRoom() {
 
@@ -1870,6 +1879,14 @@ async function createRoom() {
             status:
                 "waiting",
 
+            /*
+             * "host" means host created
+             * the current questions.
+             *
+             * "player" means player created
+             * the current questions.
+             */
+
             turn:
                 "host",
 
@@ -1877,7 +1894,10 @@ async function createRoom() {
                 1,
 
             createdAt:
-                Date.now()
+                Date.now(),
+
+            scoreSaved:
+                false
 
         };
 
@@ -1916,7 +1936,9 @@ async function createRoom() {
 }
 
 
-/* HOST ROOM */
+/* =========================================================
+   HOST ROOM
+========================================================= */
 
 function showHostRoom(
     roomCode
@@ -1968,7 +1990,9 @@ function showHostRoom(
 }
 
 
-/* JOIN SCREEN */
+/* =========================================================
+   JOIN SCREEN
+========================================================= */
 
 function showJoinScreen() {
 
@@ -2045,7 +2069,9 @@ function showJoinScreen() {
 }
 
 
-/* JOIN ROOM */
+/* =========================================================
+   JOIN ROOM
+========================================================= */
 
 async function joinRoom() {
 
@@ -2185,7 +2211,9 @@ async function joinRoom() {
 }
 
 
-/* PLAYER ROOM */
+/* =========================================================
+   PLAYER ROOM
+========================================================= */
 
 function showPlayerRoom(
     roomCode
@@ -2231,7 +2259,9 @@ function showPlayerRoom(
 }
 
 
-/* LISTEN TO ROOM */
+/* =========================================================
+   LISTEN TO ROOM
+========================================================= */
 
 function listenToRoom(
     roomCode
@@ -2308,9 +2338,11 @@ function listenToRoom(
 
 /* =========================================================
    HOST VIEW
-   ========================================================= */
+========================================================= */
 
-function updateHostView(room) {
+function updateHostView(
+    room
+) {
 
     const status =
         document.getElementById(
@@ -2326,7 +2358,7 @@ function updateHostView(room) {
         return;
 
 
-    /* WAITING FOR PLAYER */
+    /* PLAYER HAS NOT JOINED */
 
     if (!room.playerId) {
 
@@ -2346,19 +2378,23 @@ function updateHostView(room) {
     }
 
 
-    /*
-     * IMPORTANT
-     *
-     * room.turn tells us who is currently HOSTING.
-     *
-     * "host"   = original host is hosting
-     * "player" = original player is hosting
-     */
-
-
-    /* PLAYER IS CURRENT HOST */
+    /* GAME FINISHED */
 
     if (
+        room.status === "finished"
+    ) {
+
+        showResults(room);
+
+        return;
+
+    }
+
+
+    /* PLAYER IS CREATING THEIR ROUND */
+
+    if (
+        room.status === "creating" &&
         room.turn === "player"
     ) {
 
@@ -2367,63 +2403,19 @@ function updateHostView(room) {
             It's
             <span class="player-name">
                 ${escapeHTML(room.playerName)}
-            </span>
-            's turn to host ❤️
+            </span>'s turn to create questions ❤️
 
         `;
-
-
-        /*
-         * The original host is now the ANSWERER.
-         *
-         * This is the important part that was missing.
-         */
-
-        if (
-            room.status === "playing" &&
-            room.questions &&
-            room.questions.length > 0
-        ) {
-
-            status.innerHTML = `
-
-                You're answering
-                <span class="player-name">
-                    ${escapeHTML(room.playerName)}
-                </span>
-                's questions ❤️
-
-            `;
-
-            const question =
-                room.questions[
-                    room.currentQuestion
-                ];
-
-            if (question) {
-
-                renderPlayerQuestion(
-                    room,
-                    question,
-                    area
-                );
-
-            }
-
-            return;
-
-        }
-
 
         area.innerHTML = `
 
             <div class="turn-banner">
 
-                They are creating the next round.
+                They're making your questions now.
 
                 <br><br>
 
-                You'll answer their questions when they're ready.
+                You'll answer them when they're ready.
 
             </div>
 
@@ -2434,24 +2426,21 @@ function updateHostView(room) {
     }
 
 
-    /* ORIGINAL HOST IS CURRENT HOST */
-
-    status.innerHTML = `
-
-        <span class="player-name">
-            ${escapeHTML(room.playerName)}
-        </span>
-
-        joined the room ❤️
-
-    `;
-
-
-    /* FIRST ROUND WAITING */
+    /* INITIAL WAITING STATE */
 
     if (
         room.status === "waiting"
     ) {
+
+        status.innerHTML = `
+
+            <span class="player-name">
+                ${escapeHTML(room.playerName)}
+            </span>
+
+            joined the room ❤️
+
+        `;
 
         area.innerHTML = `
 
@@ -2470,71 +2459,38 @@ function updateHostView(room) {
 
         `;
 
-        const beginButton =
-            document.getElementById(
-                "beginGame"
-            );
+        document
+            .getElementById("beginGame")
+            .onclick =
+            async function() {
 
-        if (beginButton) {
+                await updateDoc(
 
-            beginButton.onclick =
-                async function() {
+                    doc(
+                        db,
+                        "triviaRooms",
+                        currentRoom
+                    ),
 
-                    beginButton.disabled =
-                        true;
+                    {
 
-                    try {
+                        status:
+                            "playing",
 
-                        await updateDoc(
+                        currentQuestion:
+                            0,
 
-                            doc(
-                                db,
-                                "triviaRooms",
-                                currentRoom
-                            ),
+                        playerAnswer:
+                            null,
 
-                            {
-                                status:
-                                    "playing"
-                            }
-
-                        );
+                        playerAnswered:
+                            false
 
                     }
 
-                    catch(error) {
+                );
 
-                        console.error(
-                            error
-                        );
-
-                        beginButton.disabled =
-                            false;
-
-                        alert(
-                            "Could not start the round."
-                        );
-
-                    }
-
-                };
-
-        }
-
-        return;
-
-    }
-
-
-    /* FINISHED */
-
-    if (
-        room.status === "finished"
-    ) {
-
-        showResults(
-            room
-        );
+            };
 
         return;
 
@@ -2547,15 +2503,54 @@ function updateHostView(room) {
         room.status === "playing"
     ) {
 
+        /*
+         * The host is always the creator
+         * during the first turn.
+         *
+         * During the second turn,
+         * the host is the person answering.
+         */
+
         const question =
-            room.questions?.[
+            room.questions[
                 room.currentQuestion
             ];
 
         if (!question)
             return;
 
-        renderHostQuestion(
+
+        if (
+            room.turn === "host"
+        ) {
+
+            status.innerHTML = `
+
+                <span class="player-name">
+                    ${escapeHTML(room.playerName)}
+                </span>
+
+                is answering your questions ❤️
+
+            `;
+
+        }
+
+        else {
+
+            status.innerHTML = `
+
+                You're answering
+                <span class="player-name">
+                    ${escapeHTML(room.playerName)}
+                </span>'s questions ❤️
+
+            `;
+
+        }
+
+
+        renderQuestionForHost(
             room,
             question,
             area
@@ -2567,46 +2562,14 @@ function updateHostView(room) {
 
 
 /* =========================================================
-   RENDER HOST QUESTION
-   ========================================================= */
+   HOST QUESTION DISPLAY
+========================================================= */
 
-function renderHostQuestion(
+function renderQuestionForHost(
     room,
     question,
     area
 ) {
-
-    /*
-     * If the current host is the original player,
-     * their score is playerScore.
-     *
-     * If the current host is the original host,
-     * their score is hostScore.
-     */
-
-    const currentHostIsPlayer =
-        room.turn === "player";
-
-    const currentHostScore =
-        currentHostIsPlayer
-        ? room.playerScore
-        : room.hostScore;
-
-    const currentAnswererScore =
-        currentHostIsPlayer
-        ? room.hostScore
-        : room.playerScore;
-
-    const currentHostName =
-        currentHostIsPlayer
-        ? room.playerName
-        : room.hostName;
-
-    const currentAnswererName =
-        currentHostIsPlayer
-        ? room.hostName
-        : room.playerName;
-
 
     area.innerHTML = `
 
@@ -2615,11 +2578,11 @@ function renderHostQuestion(
             <div class="score-box">
 
                 <div class="score-number">
-                    ${currentHostScore}
+                    ${room.hostScore}
                 </div>
 
                 <div class="score-name">
-                    ${escapeHTML(currentHostName)}
+                    You
                 </div>
 
             </div>
@@ -2627,17 +2590,16 @@ function renderHostQuestion(
             <div class="score-box">
 
                 <div class="score-number">
-                    ${currentAnswererScore}
+                    ${room.playerScore}
                 </div>
 
                 <div class="score-name">
-                    ${escapeHTML(currentAnswererName)}
+                    ${escapeHTML(room.playerName)}
                 </div>
 
             </div>
 
         </div>
-
 
         <div class="quiz-question">
 
@@ -2691,7 +2653,7 @@ function renderHostQuestion(
 
                 ${
                     room.playerAnswered
-                    ? "They answered! ❤️"
+                    ? "Answer received! ❤️"
                     : "Waiting for their answer..."
                 }
 
@@ -2702,22 +2664,20 @@ function renderHostQuestion(
     `;
 
 
-    /*
-     * Show which answer they selected.
-     */
+    /* SHOW ANSWER */
 
     if (
         room.playerAnswered &&
         room.playerAnswer !== null
     ) {
 
-        const selected =
-            room.playerAnswer;
-
         const buttons =
             area.querySelectorAll(
                 ".answer-button"
             );
+
+        const selected =
+            room.playerAnswer;
 
         if (
             buttons[selected]
@@ -2725,35 +2685,36 @@ function renderHostQuestion(
 
             buttons[selected]
                 .classList.add(
-
                     selected ===
                     question.correct
-
                     ? "correct"
-
                     : "wrong"
-
                 );
 
         }
 
+    }
 
-        /*
-         * Only the CURRENT HOST advances the round.
-         */
 
-        if (
-            room.turn ===
-            (
-                room.hostId ===
-                currentUser?.uid
-                ? "host"
-                : "player"
-            )
-        ) {
+    /*
+     * ONLY THE HOST CONTROLS MOVING
+     * TO THE NEXT QUESTION.
+     *
+     * This prevents both browsers
+     * from changing the room at once.
+     */
 
-            setTimeout(
-                async function() {
+    if (
+        room.playerAnswered &&
+        !advancing
+    ) {
+
+        advancing = true;
+
+        setTimeout(
+            async function() {
+
+                try {
 
                     const latest =
                         await getDoc(
@@ -2764,27 +2725,41 @@ function renderHostQuestion(
                             )
                         );
 
-                    if (!latest.exists())
+                    if (!latest.exists()) {
+
+                        advancing = false;
+
                         return;
+
+                    }
 
                     const latestRoom =
                         latest.data();
 
                     if (
+                        latestRoom.status === "playing" &&
                         latestRoom.playerAnswered
                     ) {
 
-                        moveToNextQuestion(
+                        await moveToNextQuestion(
                             latestRoom
                         );
 
                     }
 
-                },
-                1200
-            );
+                }
 
-        }
+                catch(error) {
+
+                    console.error(error);
+
+                }
+
+                advancing = false;
+
+            },
+            1200
+        );
 
     }
 
@@ -2793,9 +2768,11 @@ function renderHostQuestion(
 
 /* =========================================================
    PLAYER VIEW
-   ========================================================= */
+========================================================= */
 
-function updatePlayerView(room) {
+function updatePlayerView(
+    room
+) {
 
     const status =
         document.getElementById(
@@ -2826,86 +2803,16 @@ function updatePlayerView(room) {
     }
 
 
-    /*
-     * The original player is the CURRENT HOST
-     * when turn === "player".
-     */
-
+    /* PLAYER IS CREATING QUESTIONS */
 
     if (
+        room.status === "creating" &&
         room.turn === "player"
     ) {
 
-        /*
-         * CRITICAL FIX:
-         *
-         * If the player has NOT started their round yet,
-         * show the creator.
-         *
-         * If they HAVE started it,
-         * status === "playing" and questions exist,
-         * so show the HOST screen instead.
-         */
-
-        if (
-            room.status !== "playing" ||
-            !room.questions ||
-            room.questions.length === 0
-        ) {
-
-            showPlayerHostSetup(
-                room,
-                status,
-                area
-            );
-
-            return;
-
-        }
-
-
-        /*
-         * PLAYER IS NOW HOSTING.
-         */
-
-        status.innerHTML = `
-
-            You're hosting this round ❤️
-
-            <br>
-
-            <span class="player-name">
-                ${escapeHTML(room.hostName)}
-            </span>
-
-            is answering.
-
-        `;
-
-
-        const question =
-            room.questions[
-                room.currentQuestion
-            ];
-
-        if (!question) {
-
-            area.innerHTML = `
-
-                <div class="empty">
-                    Waiting for the round to load...
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-
-        renderHostQuestion(
+        showPlayerHostSetup(
             room,
-            question,
+            status,
             area
         );
 
@@ -2914,7 +2821,7 @@ function updatePlayerView(room) {
     }
 
 
-    /* ORIGINAL PLAYER IS ANSWERING */
+    /* WAITING */
 
     if (
         room.status === "waiting"
@@ -2935,6 +2842,8 @@ function updatePlayerView(room) {
 
     }
 
+
+    /* PLAYING */
 
     if (
         room.status === "playing"
@@ -2970,7 +2879,7 @@ function updatePlayerView(room) {
 
 /* =========================================================
    PLAYER CREATES THEIR TURN
-   ========================================================= */
+========================================================= */
 
 function showPlayerHostSetup(
     room,
@@ -2980,7 +2889,7 @@ function showPlayerHostSetup(
 
     status.innerHTML = `
 
-        It's your turn to host ❤️
+        It's your turn to create the questions ❤️
 
     `;
 
@@ -2990,9 +2899,9 @@ function showPlayerHostSetup(
 
             Make the questions.
 
-            <br>
+            <br><br>
 
-            They will answer them.
+            Zihan will answer them.
 
         </div>
 
@@ -3008,7 +2917,7 @@ function showPlayerHostSetup(
                 </div>
 
                 <div class="mode-description">
-                    Give them a random trivia round.
+                    Give them 5 random trivia questions.
                 </div>
 
             </button>
@@ -3033,58 +2942,40 @@ function showPlayerHostSetup(
     `;
 
 
-    const randomButton =
-        document.getElementById(
-            "playerRandomRound"
-        );
+    document
+        .getElementById("playerRandomRound")
+        .onclick =
+        async function() {
 
-    const personalButton =
-        document.getElementById(
-            "playerPersonalRound"
-        );
+            const randomQuestions =
+                createRandomQuestions(5);
 
+            await startPlayerTurn(
+                randomQuestions
+            );
 
-    if (randomButton) {
-
-        randomButton.onclick =
-            async function() {
-
-                randomButton.disabled =
-                    true;
-
-                const randomQuestions =
-                    createRandomQuestions(5);
-
-                await startPlayerTurn(
-                    randomQuestions
-                );
-
-            };
-
-    }
+        };
 
 
-    if (personalButton) {
+    document
+        .getElementById("playerPersonalRound")
+        .onclick =
+        function() {
 
-        personalButton.onclick =
-            function() {
+            showPlayerPersonalCreator(
+                room,
+                status,
+                area
+            );
 
-                showPlayerPersonalCreator(
-                    room,
-                    status,
-                    area
-                );
-
-            };
-
-    }
+        };
 
 }
 
 
 /* =========================================================
-   PLAYER PERSONAL CREATOR
-   ========================================================= */
+   PLAYER PERSONAL QUESTION CREATOR
+========================================================= */
 
 function showPlayerPersonalCreator(
     room,
@@ -3099,10 +2990,9 @@ function showPlayerPersonalCreator(
 
         status.innerHTML = `
 
-            It's your turn to host ❤️
+            Create your questions ❤️
 
         `;
-
 
         area.innerHTML = `
 
@@ -3172,14 +3062,11 @@ function showPlayerPersonalCreator(
 
             </div>
 
-
             <div class="questions-title">
                 Your Questions
             </div>
 
-
             <div id="playerQuestionList"></div>
-
 
             <button
                 class="start-button"
@@ -3283,30 +3170,20 @@ function showPlayerPersonalCreator(
                     };
 
 
-                list.appendChild(
-                    card
-                );
+                list.appendChild(card);
 
             }
         );
 
 
-        /*
-         * ADD QUESTION
-         */
-
         document
-            .getElementById(
-                "playerAddQuestion"
-            )
+            .getElementById("playerAddQuestion")
             .onclick =
             function() {
 
                 const question =
                     document
-                    .getElementById(
-                        "playerQuestion"
-                    )
+                    .getElementById("playerQuestion")
                     .value
                     .trim();
 
@@ -3314,30 +3191,22 @@ function showPlayerPersonalCreator(
                 const answers = [
 
                     document
-                    .getElementById(
-                        "playerAnswer1"
-                    )
+                    .getElementById("playerAnswer1")
                     .value
                     .trim(),
 
                     document
-                    .getElementById(
-                        "playerAnswer2"
-                    )
+                    .getElementById("playerAnswer2")
                     .value
                     .trim(),
 
                     document
-                    .getElementById(
-                        "playerAnswer3"
-                    )
+                    .getElementById("playerAnswer3")
                     .value
                     .trim(),
 
                     document
-                    .getElementById(
-                        "playerAnswer4"
-                    )
+                    .getElementById("playerAnswer4")
                     .value
                     .trim()
 
@@ -3388,14 +3257,8 @@ function showPlayerPersonalCreator(
             };
 
 
-        /*
-         * START THEIR ROUND
-         */
-
         document
-            .getElementById(
-                "playerStartRound"
-            )
+            .getElementById("playerStartRound")
             .onclick =
             async function() {
 
@@ -3410,15 +3273,6 @@ function showPlayerPersonalCreator(
                     return;
 
                 }
-
-
-                const startButton =
-                    document.getElementById(
-                        "playerStartRound"
-                    );
-
-                startButton.disabled =
-                    true;
 
 
                 await startPlayerTurn(
@@ -3437,7 +3291,7 @@ function showPlayerPersonalCreator(
 
 /* =========================================================
    START PLAYER TURN
-   ========================================================= */
+========================================================= */
 
 async function startPlayerTurn(
     playerQuestions
@@ -3481,11 +3335,29 @@ async function startPlayerTurn(
                 playerAnswered:
                     false,
 
+                /*
+                 * IMPORTANT:
+                 *
+                 * turn stays "player"
+                 * because she created these
+                 * questions.
+                 *
+                 * status changes from
+                 * "creating" to "playing".
+                 *
+                 * This is what fixes the
+                 * infinite Random/Personal
+                 * screen problem.
+                 */
+
                 status:
                     "playing",
 
                 turn:
-                    "player"
+                    "player",
+
+                roundNumber:
+                    2
 
             }
 
@@ -3495,12 +3367,10 @@ async function startPlayerTurn(
 
     catch(error) {
 
-        console.error(
-            error
-        );
+        console.error(error);
 
         alert(
-            "Could not start the round. Check your Firebase rules."
+            "Could not start the round."
         );
 
     }
@@ -3510,7 +3380,7 @@ async function startPlayerTurn(
 
 /* =========================================================
    PLAYER QUESTION
-   ========================================================= */
+========================================================= */
 
 function renderPlayerQuestion(
     room,
@@ -3519,27 +3389,17 @@ function renderPlayerQuestion(
 ) {
 
     /*
-     * Determine whose score belongs to the person
-     * currently answering.
+     * If the player created the questions,
+     * the HOST is answering.
+     *
+     * If the host created the questions,
+     * the PLAYER is answering.
      */
 
-    const answeringIsOriginalPlayer =
-        room.turn === "host";
-
-    const myScore =
-        answeringIsOriginalPlayer
-        ? room.playerScore
-        : room.hostScore;
-
-    const opponentScore =
-        answeringIsOriginalPlayer
-        ? room.hostScore
-        : room.playerScore;
-
-    const opponentName =
-        answeringIsOriginalPlayer
-        ? room.hostName
-        : room.playerName;
+    const answering =
+        room.turn === "host"
+        ? room.playerName
+        : room.hostName;
 
 
     area.innerHTML = `
@@ -3549,7 +3409,7 @@ function renderPlayerQuestion(
             <div class="score-box">
 
                 <div class="score-number">
-                    ${myScore}
+                    ${room.playerScore}
                 </div>
 
                 <div class="score-name">
@@ -3561,17 +3421,16 @@ function renderPlayerQuestion(
             <div class="score-box">
 
                 <div class="score-number">
-                    ${opponentScore}
+                    ${room.hostScore}
                 </div>
 
                 <div class="score-name">
-                    ${escapeHTML(opponentName)}
+                    ${escapeHTML(room.hostName)}
                 </div>
 
             </div>
 
         </div>
-
 
         <div class="quiz-question">
 
@@ -3587,7 +3446,6 @@ function renderPlayerQuestion(
             <h2>
                 ${escapeHTML(question.question)}
             </h2>
-
 
             <div
                 class="answers"
@@ -3630,7 +3488,6 @@ function renderPlayerQuestion(
 
             </div>
 
-
             <div class="answer-status">
 
                 ${
@@ -3646,10 +3503,6 @@ function renderPlayerQuestion(
     `;
 
 
-    /*
-     * Answer buttons
-     */
-
     area
         .querySelectorAll(
             ".answer-button"
@@ -3660,14 +3513,11 @@ function renderPlayerQuestion(
                 button.onclick =
                     function() {
 
-                        submitPlayerAnswer(
-
+                        submitAnswer(
                             Number(
                                 button.dataset.answer
                             ),
-
                             room
-
                         );
 
                     };
@@ -3675,10 +3525,6 @@ function renderPlayerQuestion(
             }
         );
 
-
-    /*
-     * Show selected answer
-     */
 
     if (
         room.playerAnswered &&
@@ -3693,20 +3539,17 @@ function renderPlayerQuestion(
         const selected =
             room.playerAnswer;
 
+
         if (
             buttons[selected]
         ) {
 
             buttons[selected]
                 .classList.add(
-
                     selected ===
                     question.correct
-
                     ? "correct"
-
                     : "wrong"
-
                 );
 
         }
@@ -3718,9 +3561,9 @@ function renderPlayerQuestion(
 
 /* =========================================================
    SUBMIT ANSWER
-   ========================================================= */
+========================================================= */
 
-async function submitPlayerAnswer(
+async function submitAnswer(
     answer,
     room
 ) {
@@ -3737,48 +3580,58 @@ async function submitPlayerAnswer(
         ];
 
 
+    if (!question)
+        return;
+
+
     const correct =
         answer ===
         question.correct;
 
 
-    try {
+    /*
+     * turn tells us WHO CREATED
+     * the questions.
+     *
+     * If host created them,
+     * player gets the point.
+     *
+     * If player created them,
+     * host gets the point.
+     */
 
-        /*
-         * The person answering is always:
-         *
-         * playerScore when host is hosting
-         * hostScore when player is hosting
-         */
-
-        const scoreField =
-            room.turn === "host"
-            ? "playerScore"
-            : "hostScore";
-
-
-        const currentScore =
-            room.turn === "host"
-            ? room.playerScore
-            : room.hostScore;
+    const scoreField =
+        room.turn === "host"
+        ? "playerScore"
+        : "hostScore";
 
 
-        const update = {
+    const currentScore =
+        room.turn === "host"
+        ? room.playerScore
+        : room.hostScore;
 
-            playerAnswer:
-                answer,
 
-            playerAnswered:
-                true
+    const update = {
 
-        };
+        playerAnswer:
+            answer,
 
+        playerAnswered:
+            true
+
+    };
+
+
+    if (correct) {
 
         update[scoreField] =
-            correct
-            ? currentScore + 1
-            : currentScore;
+            currentScore + 1;
 
+    }
+
+
+    try {
 
         await updateDoc(
 
@@ -3806,19 +3659,12 @@ async function submitPlayerAnswer(
 
 
 /* =========================================================
-   MOVE TO NEXT QUESTION / TURN
-   ========================================================= */
+   MOVE TO NEXT QUESTION
+========================================================= */
 
 async function moveToNextQuestion(
     room
 ) {
-
-    if (advancing)
-        return;
-
-
-    advancing = true;
-
 
     try {
 
@@ -3854,97 +3700,107 @@ async function moveToNextQuestion(
 
             );
 
+            return;
+
         }
 
 
         /*
-         * THIS TURN IS FINISHED
+         * CURRENT TURN IS FINISHED.
          */
+
+        if (
+            room.turn === "host"
+        ) {
+
+            /*
+             * YOU hosted first.
+             *
+             * Now Ainy gets to create
+             * her round.
+             */
+
+            await updateDoc(
+
+                doc(
+                    db,
+                    "triviaRooms",
+                    currentRoom
+                ),
+
+                {
+
+                    turn:
+                        "player",
+
+                    status:
+                        "creating",
+
+                    questions:
+                        [],
+
+                    currentQuestion:
+                        0,
+
+                    playerAnswer:
+                        null,
+
+                    playerAnswered:
+                        false,
+
+                    roundNumber:
+                        2
+
+                }
+
+            );
+
+        }
 
         else {
 
+            /*
+             * Ainy hosted second.
+             *
+             * Both turns are complete.
+             */
+
+            await updateDoc(
+
+                doc(
+                    db,
+                    "triviaRooms",
+                    currentRoom
+                ),
+
+                {
+
+                    status:
+                        "finished",
+
+                    playerAnswer:
+                        null,
+
+                    playerAnswered:
+                        false
+
+                }
+
+            );
+
 
             /*
-             * ORIGINAL HOST FINISHED.
-             *
-             * Now original player becomes host.
+             * Only the host saves
+             * the history.
              */
 
             if (
-                room.turn === "host"
+                currentUser?.uid ===
+                room.hostId &&
+                !room.scoreSaved
             ) {
 
-                await updateDoc(
-
-                    doc(
-                        db,
-                        "triviaRooms",
-                        currentRoom
-                    ),
-
-                    {
-
-                        turn:
-                            "player",
-
-                        status:
-                            "playing",
-
-                        questions:
-                            [],
-
-                        currentQuestion:
-                            0,
-
-                        playerAnswer:
-                            null,
-
-                        playerAnswered:
-                            false,
-
-                        roundNumber:
-                            (room.roundNumber || 1) + 1
-
-                    }
-
-                );
-
-            }
-
-
-            /*
-             * ORIGINAL PLAYER FINISHED.
-             *
-             * Both players have now hosted.
-             */
-
-            else {
-
-                await updateDoc(
-
-                    doc(
-                        db,
-                        "triviaRooms",
-                        currentRoom
-                    ),
-
-                    {
-
-                        status:
-                            "finished",
-
-                        playerAnswer:
-                            null,
-
-                        playerAnswered:
-                            false
-
-                    }
-
-                );
-
-
-                saveScoreHistory(
+                await saveScoreHistory(
                     room
                 );
 
@@ -3962,22 +3818,12 @@ async function moveToNextQuestion(
 
     }
 
-
-    setTimeout(
-        function() {
-
-            advancing = false;
-
-        },
-        500
-    );
-
 }
 
 
 /* =========================================================
    SAVE SCORE HISTORY
-   ========================================================= */
+========================================================= */
 
 async function saveScoreHistory(
     room
@@ -3998,6 +3844,12 @@ async function saveScoreHistory(
 
             {
 
+                hostId:
+                    room.hostId,
+
+                playerId:
+                    room.playerId,
+
                 hostName:
                     room.hostName,
 
@@ -4012,6 +3864,30 @@ async function saveScoreHistory(
 
                 finishedAt:
                     Date.now()
+
+            }
+
+        );
+
+
+        /*
+         * Mark it saved so the host
+         * doesn't accidentally create
+         * multiple history entries.
+         */
+
+        await updateDoc(
+
+            doc(
+                db,
+                "triviaRooms",
+                currentRoom
+            ),
+
+            {
+
+                scoreSaved:
+                    true
 
             }
 
@@ -4033,7 +3909,7 @@ async function saveScoreHistory(
 
 /* =========================================================
    RESULTS
-   ========================================================= */
+========================================================= */
 
 function showResults(
     room
@@ -4112,7 +3988,6 @@ function showResults(
             ${result}
         </p>
 
-
         <div class="score-board">
 
             <div class="score-box">
@@ -4127,7 +4002,6 @@ function showResults(
 
             </div>
 
-
             <div class="score-box">
 
                 <div class="score-number">
@@ -4141,7 +4015,6 @@ function showResults(
             </div>
 
         </div>
-
 
         <button
             id="backHome"
@@ -4163,7 +4036,7 @@ function showResults(
 
 /* =========================================================
    MENU
-   ========================================================= */
+========================================================= */
 
 function showMenu() {
 
@@ -4180,12 +4053,7 @@ function showMenu() {
     currentRoom =
         null;
 
-
     questions = [];
-
-
-    advancing =
-        false;
 
 
     container.innerHTML = `
@@ -4244,7 +4112,7 @@ function showMenu() {
 
 /* =========================================================
    ROOM CODE
-   ========================================================= */
+========================================================= */
 
 function generateRoomCode() {
 
@@ -4262,7 +4130,7 @@ function generateRoomCode() {
 
 /* =========================================================
    USER NAME
-   ========================================================= */
+========================================================= */
 
 function getUserName() {
 
@@ -4292,7 +4160,7 @@ function getUserName() {
 
 /* =========================================================
    ESCAPE HTML
-   ========================================================= */
+========================================================= */
 
 function escapeHTML(
     text
@@ -4309,6 +4177,7 @@ function escapeHTML(
     return div.innerHTML;
 
 }
+
 
 </script>
 
