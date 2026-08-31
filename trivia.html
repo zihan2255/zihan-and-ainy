@@ -12,18 +12,14 @@
 
 <title>Zihan & Ainy — Trivia</title>
 
-
 <style>
 
 * {
     box-sizing: border-box;
 }
 
-
 body {
-
     margin: 0;
-
     min-height: 100vh;
 
     background:
@@ -62,16 +58,12 @@ body {
         serif;
 
     padding: 30px 0;
-
 }
 
-
 body::before {
-
     content: "";
 
     position: fixed;
-
     inset: 0;
 
     pointer-events: none;
@@ -85,20 +77,15 @@ body::before {
     background-size: 85px 85px;
 
     opacity: .18;
-
 }
 
-
 .container {
-
     position: relative;
-
     z-index: 1;
 
     width: min(92%, 600px);
 
     margin: auto;
-
     padding: 45px 30px;
 
     text-align: center;
@@ -118,16 +105,12 @@ body::before {
 
     backdrop-filter:
         blur(14px);
-
 }
 
-
 .back {
-
     position: absolute;
 
     top: 20px;
-
     left: 20px;
 
     color: #aaa4b8;
@@ -141,62 +124,40 @@ body::before {
     letter-spacing: 1.5px;
 
     text-transform: uppercase;
-
 }
-
 
 .back:hover {
-
     color: white;
-
 }
-
 
 .heart {
-
     font-size: 38px;
-
     margin-bottom: 5px;
-
     color: #e7b8ca;
-
 }
 
-
 h1 {
-
-    margin:
-        5px 0 8px;
+    margin: 5px 0 8px;
 
     font-size: 48px;
 
     font-weight: normal;
-
 }
 
-
 .subtitle {
-
     margin-bottom: 35px;
 
     color: #aaa3b6;
 
     font-style: italic;
-
 }
-
 
 .menu {
-
     display: grid;
-
     gap: 15px;
-
 }
 
-
 button {
-
     border:
         1px solid
         rgba(255,255,255,.12);
@@ -221,34 +182,25 @@ button {
     text-transform: uppercase;
 
     transition: .2s ease;
-
 }
 
-
 button:hover {
-
     background:
         rgba(255,255,255,.16);
 
     transform:
         translateY(-2px);
-
 }
 
-
 button:disabled {
-
     opacity: .45;
 
     cursor: not-allowed;
 
     transform: none;
-
 }
 
-
 .note {
-
     margin-top: 30px;
 
     color: #777188;
@@ -258,16 +210,10 @@ button:disabled {
     font-size: 10px;
 
     letter-spacing: 1px;
-
 }
-
-
-/* INPUTS */
-
 
 input,
 select {
-
     width: 100%;
 
     padding: 14px;
@@ -288,49 +234,31 @@ select {
     font-family: Arial, sans-serif;
 
     font-size: 13px;
-
 }
-
 
 input::placeholder {
-
     color: #858092;
-
 }
-
 
 input:focus,
 select:focus {
-
     border-color:
         rgba(255,255,255,.3);
-
 }
-
 
 select option {
-
     color: black;
-
 }
 
-
-/* QUESTION CREATOR */
-
-
 .question-box {
-
     display: grid;
 
     gap: 10px;
 
     text-align: left;
-
 }
 
-
 .questions-title {
-
     margin-top: 35px;
 
     margin-bottom: 15px;
@@ -344,12 +272,9 @@ select option {
     letter-spacing: 2px;
 
     text-transform: uppercase;
-
 }
 
-
 .question-card {
-
     margin-top: 12px;
 
     padding: 18px;
@@ -364,12 +289,9 @@ select option {
         rgba(255,255,255,.1);
 
     border-radius: 10px;
-
 }
 
-
 .question-number {
-
     color: #cda6b7;
 
     font-family: Arial, sans-serif;
@@ -381,21 +303,15 @@ select option {
     text-transform: uppercase;
 
     margin-bottom: 8px;
-
 }
 
-
 .question-text {
-
     font-size: 18px;
 
     margin-bottom: 12px;
-
 }
 
-
 .answer-line {
-
     color: #b2acbb;
 
     font-family: Arial, sans-serif;
@@ -403,12 +319,9 @@ select option {
     font-size: 12px;
 
     line-height: 1.8;
-
 }
 
-
 .correct-answer {
-
     margin-top: 10px;
 
     color: #d4b6c5;
@@ -416,16 +329,12 @@ select option {
     font-family: Arial, sans-serif;
 
     font-size: 11px;
-
 }
 
-
 .delete-question {
-
     margin-top: 12px;
 
-    padding:
-        8px 12px;
+    padding: 8px 12px;
 
     font-size: 9px;
 
@@ -433,12 +342,9 @@ select option {
         rgba(255,80,100,.08);
 
     color: #d9aab4;
-
 }
 
-
 .start-button {
-
     width: 100%;
 
     margin-top: 25px;
@@ -447,15 +353,9 @@ select option {
 
     background:
         rgba(231,184,202,.14);
-
 }
 
-
-/* ROOM CODE */
-
-
 .room-code {
-
     margin: 20px 0;
 
     padding: 20px;
@@ -464,12 +364,9 @@ select option {
         rgba(255,255,255,.06);
 
     border-radius: 12px;
-
 }
 
-
 .room-code-label {
-
     font-family: Arial, sans-serif;
 
     font-size: 9px;
@@ -477,12 +374,9 @@ select option {
     letter-spacing: 2px;
 
     color: #91899e;
-
 }
 
-
 .room-code-number {
-
     margin-top: 8px;
 
     font-family: Arial, sans-serif;
@@ -492,12 +386,9 @@ select option {
     letter-spacing: 8px;
 
     color: #e7b8ca;
-
 }
 
-
 .status {
-
     margin: 15px 0;
 
     padding: 12px;
@@ -512,24 +403,14 @@ select option {
     font-family: Arial, sans-serif;
 
     font-size: 11px;
-
 }
-
 
 .player-name {
-
     color: #e7b8ca;
-
 }
 
-
-/* QUIZ */
-
-
 .quiz-question {
-
-    margin:
-        25px 0;
+    margin: 25px 0;
 
     padding: 25px;
 
@@ -537,12 +418,9 @@ select option {
         rgba(255,255,255,.06);
 
     border-radius: 12px;
-
 }
 
-
 .question-counter {
-
     color: #938b9f;
 
     font-family: Arial, sans-serif;
@@ -554,86 +432,59 @@ select option {
     text-transform: uppercase;
 
     margin-bottom: 15px;
-
 }
 
-
 .quiz-question h2 {
-
     font-size: 27px;
 
     font-weight: normal;
 
     line-height: 1.4;
-
 }
 
-
 .answers {
-
     display: grid;
 
     gap: 10px;
 
     margin-top: 20px;
-
 }
 
-
 .answer-button {
-
     text-align: left;
 
     padding: 16px;
 
     font-size: 12px;
-
 }
 
-
 .answer-button.selected {
-
     background:
         rgba(231,184,202,.22);
 
     border-color:
         rgba(231,184,202,.4);
-
 }
-
 
 .answer-button.correct {
-
     background:
         rgba(100,190,130,.2);
-
 }
-
 
 .answer-button.wrong {
-
     background:
         rgba(220,90,100,.2);
-
 }
 
-
 .answer-letter {
-
     display: inline-block;
 
     width: 25px;
 
     color: #d6aebe;
-
 }
 
-
-/* SCORE */
-
-
 .score-board {
-
     display: flex;
 
     justify-content: center;
@@ -641,12 +492,9 @@ select option {
     gap: 30px;
 
     margin: 20px 0;
-
 }
 
-
 .score-box {
-
     min-width: 110px;
 
     padding: 15px;
@@ -655,19 +503,13 @@ select option {
         rgba(255,255,255,.05);
 
     border-radius: 10px;
-
 }
-
 
 .score-number {
-
     font-size: 28px;
-
 }
 
-
 .score-name {
-
     margin-top: 5px;
 
     color: #9d96a7;
@@ -679,12 +521,9 @@ select option {
     text-transform: uppercase;
 
     letter-spacing: 1px;
-
 }
 
-
 .answer-status {
-
     margin-top: 20px;
 
     color: #aaa3b6;
@@ -692,12 +531,9 @@ select option {
     font-family: Arial, sans-serif;
 
     font-size: 11px;
-
 }
 
-
 .empty {
-
     color: #777188;
 
     font-family: Arial, sans-serif;
@@ -705,12 +541,9 @@ select option {
     font-size: 11px;
 
     margin-top: 15px;
-
 }
 
-
 .error {
-
     color: #d99da9;
 
     font-family: Arial, sans-serif;
@@ -718,59 +551,77 @@ select option {
     font-size: 11px;
 
     margin-top: 15px;
-
 }
 
+.mode-box {
+    margin-bottom: 20px;
 
-/* MOBILE */
+    padding: 15px;
 
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.04);
+}
+
+.mode-title {
+    margin-bottom: 10px;
+
+    color: #aaa3b6;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+.category-label {
+    margin-top: 12px;
+
+    color: #91899e;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 9px;
+}
 
 @media (max-width: 600px) {
 
     body {
-
         padding: 15px 0;
-
     }
 
     .container {
-
         width: 94%;
 
         padding:
             40px 20px;
-
     }
 
     h1 {
-
         font-size: 38px;
-
     }
 
     .room-code-number {
-
         font-size: 28px;
 
         letter-spacing: 5px;
-
     }
-
 }
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <div
     class="container"
     id="app"
 >
-
 
 <a
     class="back"
@@ -779,58 +630,48 @@ select option {
     ← Back
 </a>
 
-
 <div class="heart">
     ♥
 </div>
-
 
 <h1>
     Trivia
 </h1>
 
-
 <p class="subtitle">
     How well do you know each other?
 </p>
 
-
 <div class="menu">
-
 
 <button id="hostButton">
     Host a Round
 </button>
 
-
 <button id="joinButton">
     Join a Round
 </button>
 
-
 </div>
-
 
 <div class="note">
     A little game for just the two of us
 </div>
-
 
 </div>
 
 
 <script type="module">
 
-
-/* FIREBASE */
-
+/* =========================
+   FIREBASE
+========================= */
 
 import {
     initializeApp
 }
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
 
 import {
     getAuth,
@@ -839,15 +680,13 @@ import {
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-
 import {
     getFirestore,
     doc,
     setDoc,
     getDoc,
     updateDoc,
-    onSnapshot,
-    deleteDoc
+    onSnapshot
 }
 from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -884,10 +723,8 @@ const app =
         firebaseConfig
     );
 
-
 const auth =
     getAuth(app);
-
 
 const db =
     getFirestore(app);
@@ -907,24 +744,600 @@ let roomListener = null;
 
 let questions = [];
 
-let selectedAnswer = null;
+let advancing = false;
 
 
-/* AUTH */
+/* =========================
+   QUESTION BANK
+========================= */
 
+const questionBank = [
+
+    {
+        question: "What is the largest planet in our solar system?",
+        answers: [
+            "Earth",
+            "Jupiter",
+            "Saturn",
+            "Neptune"
+        ],
+        correct: 1,
+        category: "Science"
+    },
+
+    {
+        question: "What is the capital of Japan?",
+        answers: [
+            "Seoul",
+            "Tokyo",
+            "Beijing",
+            "Bangkok"
+        ],
+        correct: 1,
+        category: "Geography"
+    },
+
+    {
+        question: "How many continents are there?",
+        answers: [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
+        correct: 2,
+        category: "Geography"
+    },
+
+    {
+        question: "Which animal is the fastest land animal?",
+        answers: [
+            "Lion",
+            "Cheetah",
+            "Horse",
+            "Leopard"
+        ],
+        correct: 1,
+        category: "Animals"
+    },
+
+    {
+        question: "How many sides does a hexagon have?",
+        answers: [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
+        correct: 1,
+        category: "Math"
+    },
+
+    {
+        question: "Which ocean is the largest?",
+        answers: [
+            "Atlantic Ocean",
+            "Indian Ocean",
+            "Pacific Ocean",
+            "Arctic Ocean"
+        ],
+        correct: 2,
+        category: "Geography"
+    },
+
+    {
+        question: "What gas do humans need to breathe?",
+        answers: [
+            "Carbon dioxide",
+            "Oxygen",
+            "Hydrogen",
+            "Helium"
+        ],
+        correct: 1,
+        category: "Science"
+    },
+
+    {
+        question: "Which sport uses a racket and a shuttlecock?",
+        answers: [
+            "Tennis",
+            "Badminton",
+            "Squash",
+            "Table Tennis"
+        ],
+        correct: 1,
+        category: "Sports"
+    },
+
+    {
+        question: "What is 12 × 12?",
+        answers: [
+            "124",
+            "134",
+            "144",
+            "154"
+        ],
+        correct: 2,
+        category: "Math"
+    },
+
+    {
+        question: "Which country is famous for the Eiffel Tower?",
+        answers: [
+            "Italy",
+            "France",
+            "Spain",
+            "Germany"
+        ],
+        correct: 1,
+        category: "Geography"
+    },
+
+    {
+        question: "How many days are in a leap year?",
+        answers: [
+            "364",
+            "365",
+            "366",
+            "367"
+        ],
+        correct: 2,
+        category: "General"
+    },
+
+    {
+        question: "Which planet is known as the Red Planet?",
+        answers: [
+            "Venus",
+            "Mars",
+            "Jupiter",
+            "Mercury"
+        ],
+        correct: 1,
+        category: "Science"
+    },
+
+    {
+        question: "What is the smallest prime number?",
+        answers: [
+            "0",
+            "1",
+            "2",
+            "3"
+        ],
+        correct: 2,
+        category: "Math"
+    },
+
+    {
+        question: "Which animal is the largest living land animal?",
+        answers: [
+            "Giraffe",
+            "Elephant",
+            "Rhino",
+            "Hippo"
+        ],
+        correct: 1,
+        category: "Animals"
+    },
+
+    {
+        question: "How many players are on a football team on the field?",
+        answers: [
+            "9",
+            "10",
+            "11",
+            "12"
+        ],
+        correct: 2,
+        category: "Sports"
+    },
+
+    {
+        question: "Which planet is closest to the Sun?",
+        answers: [
+            "Venus",
+            "Earth",
+            "Mercury",
+            "Mars"
+        ],
+        correct: 2,
+        category: "Science"
+    },
+
+    {
+        question: "What is the capital of Italy?",
+        answers: [
+            "Milan",
+            "Venice",
+            "Rome",
+            "Naples"
+        ],
+        correct: 2,
+        category: "Geography"
+    },
+
+    {
+        question: "Which instrument has black and white keys?",
+        answers: [
+            "Guitar",
+            "Piano",
+            "Violin",
+            "Drums"
+        ],
+        correct: 1,
+        category: "Music"
+    },
+
+    {
+        question: "How many colors are traditionally in a rainbow?",
+        answers: [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
+        correct: 2,
+        category: "Science"
+    },
+
+    {
+        question: "Which month comes after September?",
+        answers: [
+            "August",
+            "October",
+            "November",
+            "December"
+        ],
+        correct: 1,
+        category: "General"
+    },
+
+    {
+        question: "What is the largest mammal in the world?",
+        answers: [
+            "Elephant",
+            "Blue Whale",
+            "Giraffe",
+            "Orca"
+        ],
+        correct: 1,
+        category: "Animals"
+    },
+
+    {
+        question: "Which country has the Great Pyramids of Giza?",
+        answers: [
+            "Mexico",
+            "Egypt",
+            "Greece",
+            "Turkey"
+        ],
+        correct: 1,
+        category: "History"
+    },
+
+    {
+        question: "What is 100 divided by 4?",
+        answers: [
+            "20",
+            "25",
+            "30",
+            "40"
+        ],
+        correct: 1,
+        category: "Math"
+    },
+
+    {
+        question: "Which sport is played at Wimbledon?",
+        answers: [
+            "Football",
+            "Tennis",
+            "Cricket",
+            "Golf"
+        ],
+        correct: 1,
+        category: "Sports"
+    },
+
+    {
+        question: "Which is the smallest ocean?",
+        answers: [
+            "Indian",
+            "Atlantic",
+            "Arctic",
+            "Pacific"
+        ],
+        correct: 2,
+        category: "Geography"
+    },
+
+    {
+        question: "What do bees make?",
+        answers: [
+            "Milk",
+            "Honey",
+            "Bread",
+            "Sugar"
+        ],
+        correct: 1,
+        category: "Animals"
+    },
+
+    {
+        question: "Which planet has rings that are easy to see?",
+        answers: [
+            "Mars",
+            "Saturn",
+            "Venus",
+            "Earth"
+        ],
+        correct: 1,
+        category: "Science"
+    },
+
+    {
+        question: "How many hours are in one day?",
+        answers: [
+            "12",
+            "18",
+            "24",
+            "30"
+        ],
+        correct: 2,
+        category: "General"
+    },
+
+    {
+        question: "Which instrument normally has six strings?",
+        answers: [
+            "Piano",
+            "Guitar",
+            "Flute",
+            "Trumpet"
+        ],
+        correct: 1,
+        category: "Music"
+    },
+
+    {
+        question: "What is 15 + 27?",
+        answers: [
+            "32",
+            "40",
+            "42",
+            "44"
+        ],
+        correct: 2,
+        category: "Math"
+    },
+
+    {
+        question: "Which country is shaped somewhat like a boot?",
+        answers: [
+            "Italy",
+            "France",
+            "Brazil",
+            "India"
+        ],
+        correct: 0,
+        category: "Geography"
+    },
+
+    {
+        question: "Which animal is often called man's best friend?",
+        answers: [
+            "Cat",
+            "Dog",
+            "Horse",
+            "Rabbit"
+        ],
+        correct: 1,
+        category: "Animals"
+    },
+
+    {
+        question: "What is the opposite of 'ancient'?",
+        answers: [
+            "Old",
+            "Modern",
+            "Historic",
+            "Past"
+        ],
+        correct: 1,
+        category: "General"
+    },
+
+    {
+        question: "Which sport uses a hoop and a basketball?",
+        answers: [
+            "Basketball",
+            "Volleyball",
+            "Football",
+            "Baseball"
+        ],
+        correct: 0,
+        category: "Sports"
+    },
+
+    {
+        question: "Which famous ship sank in 1912?",
+        answers: [
+            "Titanic",
+            "Mayflower",
+            "Santa Maria",
+            "Endurance"
+        ],
+        correct: 0,
+        category: "History"
+    },
+
+    {
+        question: "What is the boiling point of water at sea level?",
+        answers: [
+            "50°C",
+            "75°C",
+            "100°C",
+            "150°C"
+        ],
+        correct: 2,
+        category: "Science"
+    },
+
+    {
+        question: "How many letters are in the English alphabet?",
+        answers: [
+            "24",
+            "25",
+            "26",
+            "27"
+        ],
+        correct: 2,
+        category: "General"
+    },
+
+    {
+        question: "Which country is home to the city of Barcelona?",
+        answers: [
+            "Portugal",
+            "Spain",
+            "France",
+            "Italy"
+        ],
+        correct: 1,
+        category: "Geography"
+    },
+
+    {
+        question: "What is 9 × 9?",
+        answers: [
+            "72",
+            "81",
+            "89",
+            "91"
+        ],
+        correct: 1,
+        category: "Math"
+    },
+
+    {
+        question: "Which animal can change its color to camouflage itself?",
+        answers: [
+            "Chameleon",
+            "Elephant",
+            "Penguin",
+            "Horse"
+        ],
+        correct: 0,
+        category: "Animals"
+    },
+
+    {
+        question: "Which sport is associated with the term 'checkmate'?",
+        answers: [
+            "Boxing",
+            "Chess",
+            "Football",
+            "Golf"
+        ],
+        correct: 1,
+        category: "Sports"
+    }
+
+];
+
+
+/* =========================
+   RANDOM QUESTIONS
+========================= */
+
+function getRandomQuestions(
+    amount,
+    category
+) {
+
+    let available =
+        [...questionBank];
+
+
+    if (
+        category !== "Random"
+    ) {
+
+        available =
+            available.filter(
+                question =>
+                    question.category ===
+                    category
+            );
+
+    }
+
+
+    /*
+        Fisher-Yates shuffle.
+        This means the questions
+        are randomly rearranged.
+    */
+
+    for (
+        let i =
+            available.length - 1;
+
+        i > 0;
+
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+
+        [
+            available[i],
+            available[j]
+        ] =
+        [
+            available[j],
+            available[i]
+        ];
+
+    }
+
+
+    return available.slice(
+        0,
+        Math.min(
+            amount,
+            available.length
+        )
+    );
+
+}
+
+
+/* =========================
+   AUTH
+========================= */
 
 onAuthStateChanged(
     auth,
     function(user) {
 
-        currentUser = user;
+        currentUser =
+            user;
 
     }
 );
 
 
-/* MAIN MENU */
-
+/* =========================
+   MENU
+========================= */
 
 document
     .getElementById("hostButton")
@@ -938,12 +1351,14 @@ document
     showJoinScreen;
 
 
-/* HOST SCREEN */
-
+/* =========================
+   HOST SCREEN
+========================= */
 
 function showHostScreen() {
 
     questions = [];
+
 
     container.innerHTML = `
 
@@ -955,21 +1370,135 @@ function showHostScreen() {
             ← Back
         </a>
 
+
         <div class="heart">
             ♥
         </div>
+
 
         <h1>
             Host a Round
         </h1>
 
+
         <p class="subtitle">
-            Create your questions
+            Choose how you want to play
         </p>
 
 
-        <div class="question-box">
+        <div class="mode-box">
 
+            <div class="mode-title">
+                Question Mode
+            </div>
+
+
+            <select
+                id="questionMode"
+            >
+
+                <option value="random">
+                    🎲 Random Questions
+                </option>
+
+                <option value="custom">
+                    ✍️ Make My Own
+                </option>
+
+            </select>
+
+
+            <div
+                id="randomSettings"
+                style="margin-top:10px;"
+            >
+
+                <div class="category-label">
+                    Number of Questions
+                </div>
+
+                <select
+                    id="questionAmount"
+                >
+
+                    <option value="5">
+                        5 Questions
+                    </option>
+
+                    <option
+                        value="10"
+                        selected
+                    >
+                        10 Questions
+                    </option>
+
+                    <option value="15">
+                        15 Questions
+                    </option>
+
+                    <option value="20">
+                        20 Questions
+                    </option>
+
+                </select>
+
+
+                <div class="category-label">
+                    Category
+                </div>
+
+                <select
+                    id="questionCategory"
+                >
+
+                    <option value="Random">
+                        🎲 Random Category
+                    </option>
+
+                    <option value="General">
+                        General
+                    </option>
+
+                    <option value="Science">
+                        Science
+                    </option>
+
+                    <option value="Geography">
+                        Geography
+                    </option>
+
+                    <option value="Sports">
+                        Sports
+                    </option>
+
+                    <option value="Animals">
+                        Animals
+                    </option>
+
+                    <option value="Math">
+                        Math
+                    </option>
+
+                    <option value="Music">
+                        Music
+                    </option>
+
+                    <option value="History">
+                        History
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="question-box"
+            id="customQuestionBox"
+            style="display:none;"
+        >
 
             <input
                 id="question"
@@ -1039,16 +1568,22 @@ function showHostScreen() {
                 + Add Question
             </button>
 
-
         </div>
 
 
-        <div class="questions-title">
+        <div
+            class="questions-title"
+            id="questionsTitle"
+            style="display:none;"
+        >
             Your Questions
         </div>
 
 
-        <div id="questionList"></div>
+        <div
+            id="questionList"
+        >
+        </div>
 
 
         <button
@@ -1073,6 +1608,73 @@ function showHostScreen() {
         };
 
 
+    const mode =
+        document
+        .getElementById(
+            "questionMode"
+        );
+
+
+    const customBox =
+        document
+        .getElementById(
+            "customQuestionBox"
+        );
+
+
+    const randomSettings =
+        document
+        .getElementById(
+            "randomSettings"
+        );
+
+
+    const questionsTitle =
+        document
+        .getElementById(
+            "questionsTitle"
+        );
+
+
+    mode.onchange =
+        function() {
+
+            if (
+                mode.value ===
+                "random"
+            ) {
+
+                customBox.style.display =
+                    "none";
+
+                randomSettings.style.display =
+                    "block";
+
+                questionsTitle.style.display =
+                    "none";
+
+                renderQuestions();
+
+            }
+
+            else {
+
+                customBox.style.display =
+                    "grid";
+
+                randomSettings.style.display =
+                    "none";
+
+                questionsTitle.style.display =
+                    "block";
+
+                renderQuestions();
+
+            }
+
+        };
+
+
     document
         .getElementById("addQuestion")
         .onclick =
@@ -1090,8 +1692,9 @@ function showHostScreen() {
 }
 
 
-/* ADD QUESTION */
-
+/* =========================
+   ADD CUSTOM QUESTION
+========================= */
 
 function addQuestion() {
 
@@ -1136,7 +1739,8 @@ function addQuestion() {
     if (
         !question ||
         answers.some(
-            answer => !answer
+            answer =>
+                !answer
         ) ||
         correct === ""
     ) {
@@ -1159,7 +1763,10 @@ function addQuestion() {
             answers,
 
         correct:
-            Number(correct)
+            Number(correct),
+
+        category:
+            "Custom"
 
     });
 
@@ -1194,17 +1801,21 @@ function addQuestion() {
 }
 
 
-/* DISPLAY QUESTIONS */
-
+/* =========================
+   DISPLAY CUSTOM QUESTIONS
+========================= */
 
 function renderQuestions() {
 
     const list =
         document
-        .getElementById("questionList");
+        .getElementById(
+            "questionList"
+        );
 
 
-    if (!list) return;
+    if (!list)
+        return;
 
 
     list.innerHTML = "";
@@ -1215,9 +1826,11 @@ function renderQuestions() {
     ) {
 
         list.innerHTML = `
+
             <div class="empty">
                 No questions yet.
             </div>
+
         `;
 
         return;
@@ -1226,11 +1839,14 @@ function renderQuestions() {
 
 
     questions.forEach(
-        function(item, index) {
-
+        function(
+            item,
+            index
+        ) {
 
             const card =
-                document.createElement(
+                document
+                .createElement(
                     "div"
                 );
 
@@ -1245,52 +1861,56 @@ function renderQuestions() {
                     Question ${index + 1}
                 </div>
 
+
                 <div class="question-text">
                     ${escapeHTML(
                         item.question
                     )}
                 </div>
 
+
                 <div class="answer-line">
 
-                    1.
+                    A.
                     ${escapeHTML(
                         item.answers[0]
                     )}
 
                     <br>
 
-                    2.
+                    B.
                     ${escapeHTML(
                         item.answers[1]
                     )}
 
                     <br>
 
-                    3.
+                    C.
                     ${escapeHTML(
                         item.answers[2]
                     )}
 
                     <br>
 
-                    4.
+                    D.
                     ${escapeHTML(
                         item.answers[3]
                     )}
 
                 </div>
 
+
                 <div class="correct-answer">
 
                     ✓ Correct:
-                    Answer ${item.correct + 1}
+                    Answer
+                    ${item.correct + 1}
 
                 </div>
 
+
                 <button
                     class="delete-question"
-                    data-index="${index}"
                 >
                     Delete Question
                 </button>
@@ -1315,7 +1935,9 @@ function renderQuestions() {
                 };
 
 
-            list.appendChild(card);
+            list.appendChild(
+                card
+            );
 
         }
     );
@@ -1323,10 +1945,63 @@ function renderQuestions() {
 }
 
 
-/* CREATE ROOM */
-
+/* =========================
+   CREATE ROOM
+========================= */
 
 async function createRoom() {
+
+    const mode =
+        document
+        .getElementById(
+            "questionMode"
+        );
+
+
+    /*
+        If Random mode is selected,
+        generate the questions now.
+
+        This happens ONLY once on
+        the host's device.
+
+        Those exact questions are
+        then saved inside Firebase,
+        so both players see the
+        same round.
+    */
+
+    if (
+        mode &&
+        mode.value === "random"
+    ) {
+
+        const amount =
+            Number(
+                document
+                .getElementById(
+                    "questionAmount"
+                )
+                .value
+            );
+
+
+        const category =
+            document
+            .getElementById(
+                "questionCategory"
+            )
+            .value;
+
+
+        questions =
+            getRandomQuestions(
+                amount,
+                category
+            );
+
+    }
+
 
     if (
         questions.length === 0
@@ -1424,12 +2099,13 @@ async function createRoom() {
             roomCode
         );
 
-
     }
 
     catch(error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         alert(
             "Could not create the room. Check your Firebase rules."
@@ -1440,8 +2116,9 @@ async function createRoom() {
 }
 
 
-/* HOST ROOM */
-
+/* =========================
+   HOST ROOM
+========================= */
 
 function showHostRoom(
     roomCode
@@ -1453,9 +2130,11 @@ function showHostRoom(
             ♥
         </div>
 
+
         <h1>
             Your Round
         </h1>
+
 
         <p class="subtitle">
             Send this code to the other player
@@ -1498,8 +2177,9 @@ function showHostRoom(
 }
 
 
-/* LISTEN TO ROOM */
-
+/* =========================
+   LISTEN TO ROOM
+========================= */
 
 function listenToRoom(
     roomCode
@@ -1523,7 +2203,9 @@ function listenToRoom(
 
             function(snapshot) {
 
-                if (!snapshot.exists()) {
+                if (
+                    !snapshot.exists()
+                ) {
 
                     alert(
                         "This room no longer exists."
@@ -1554,6 +2236,7 @@ function listenToRoom(
                     );
 
                 }
+
                 else {
 
                     updatePlayerView(
@@ -1577,8 +2260,9 @@ function listenToRoom(
 }
 
 
-/* HOST VIEW */
-
+/* =========================
+   HOST VIEW
+========================= */
 
 function updateHostView(
     room
@@ -1596,14 +2280,20 @@ function updateHostView(
         );
 
 
-    if (!status || !area)
+    if (
+        !status ||
+        !area
+    )
         return;
 
 
-    if (!room.playerId) {
+    if (
+        !room.playerId
+    ) {
 
         status.innerHTML =
             "Waiting for the other player...";
+
 
         area.innerHTML = `
 
@@ -1618,13 +2308,19 @@ function updateHostView(
     }
 
 
-    status.innerHTML =
-        `<span class="player-name">
+    status.innerHTML = `
+
+        <span class="player-name">
+
             ${escapeHTML(
                 room.playerName
             )}
+
         </span>
-        joined the room ❤️`;
+
+        joined the room ❤️
+
+    `;
 
 
     if (
@@ -1645,20 +2341,25 @@ function updateHostView(
 
 
         document
-            .getElementById("beginGame")
+            .getElementById(
+                "beginGame"
+            )
             .onclick =
             async function() {
 
                 await updateDoc(
+
                     doc(
                         db,
                         "triviaRooms",
                         currentRoom
                     ),
+
                     {
                         status:
                             "playing"
                     }
+
                 );
 
             };
@@ -1730,10 +2431,12 @@ function updateHostView(
         <div class="quiz-question">
 
             <div class="question-counter">
+
                 Question
                 ${room.currentQuestion + 1}
                 /
                 ${room.questions.length}
+
             </div>
 
 
@@ -1748,7 +2451,10 @@ function updateHostView(
 
                 ${question.answers
                     .map(
-                        function(answer, index) {
+                        function(
+                            answer,
+                            index
+                        ) {
 
                             return `
 
@@ -1816,14 +2522,27 @@ function updateHostView(
             buttons[
                 selected
             ].classList.add(
+
                 selected ===
                 question.correct
-                ? "correct"
-                : "wrong"
+
+                    ? "correct"
+
+                    : "wrong"
+
             );
 
         }
 
+
+        /*
+            Only the host advances
+            the question.
+
+            This prevents both
+            devices from trying to
+            advance at the same time.
+        */
 
         setTimeout(
             async function() {
@@ -1838,7 +2557,9 @@ function updateHostView(
                     );
 
 
-                if (!latest.exists())
+                if (
+                    !latest.exists()
+                )
                     return;
 
 
@@ -1865,11 +2586,9 @@ function updateHostView(
 }
 
 
-/* MOVE NEXT QUESTION */
-
-
-let advancing = false;
-
+/* =========================
+   NEXT QUESTION
+========================= */
 
 async function moveToNextQuestion(
     room
@@ -1890,15 +2609,18 @@ async function moveToNextQuestion(
         ) {
 
             await updateDoc(
+
                 doc(
                     db,
                     "triviaRooms",
                     currentRoom
                 ),
+
                 {
                     status:
                         "finished"
                 }
+
             );
 
         }
@@ -1906,11 +2628,13 @@ async function moveToNextQuestion(
         else {
 
             await updateDoc(
+
                 doc(
                     db,
                     "triviaRooms",
                     currentRoom
                 ),
+
                 {
 
                     currentQuestion:
@@ -1923,6 +2647,7 @@ async function moveToNextQuestion(
                         false
 
                 }
+
             );
 
         }
@@ -1931,7 +2656,9 @@ async function moveToNextQuestion(
 
     catch(error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
     }
 
@@ -1948,8 +2675,9 @@ async function moveToNextQuestion(
 }
 
 
-/* JOIN SCREEN */
-
+/* =========================
+   JOIN SCREEN
+========================= */
 
 function showJoinScreen() {
 
@@ -1981,7 +2709,6 @@ function showJoinScreen() {
 
         <div class="question-box">
 
-
             <input
                 id="playerName"
                 type="text"
@@ -2005,20 +2732,22 @@ function showJoinScreen() {
                 Join Round
             </button>
 
-
         </div>
 
 
         <div
             id="joinError"
             class="error"
-        ></div>
+        >
+        </div>
 
     `;
 
 
     document
-        .getElementById("backButton")
+        .getElementById(
+            "backButton"
+        )
         .onclick =
         function(event) {
 
@@ -2030,35 +2759,44 @@ function showJoinScreen() {
 
 
     document
-        .getElementById("joinRoomButton")
+        .getElementById(
+            "joinRoomButton"
+        )
         .onclick =
         joinRoom;
 
 }
 
 
-/* JOIN ROOM */
-
+/* =========================
+   JOIN ROOM
+========================= */
 
 async function joinRoom() {
 
     const name =
         document
-        .getElementById("playerName")
+        .getElementById(
+            "playerName"
+        )
         .value
         .trim();
 
 
     const roomCode =
         document
-        .getElementById("roomCode")
+        .getElementById(
+            "roomCode"
+        )
         .value
         .trim();
 
 
     const error =
         document
-        .getElementById("joinError");
+        .getElementById(
+            "joinError"
+        );
 
 
     error.textContent = "";
@@ -2114,7 +2852,9 @@ async function joinRoom() {
             );
 
 
-        if (!snapshot.exists()) {
+        if (
+            !snapshot.exists()
+        ) {
 
             error.textContent =
                 "That room doesn't exist.";
@@ -2128,7 +2868,9 @@ async function joinRoom() {
             snapshot.data();
 
 
-        if (room.playerId) {
+        if (
+            room.playerId
+        ) {
 
             error.textContent =
                 "That room already has a player.";
@@ -2139,7 +2881,9 @@ async function joinRoom() {
 
 
         await updateDoc(
+
             roomReference,
+
             {
 
                 playerId:
@@ -2149,6 +2893,7 @@ async function joinRoom() {
                     name
 
             }
+
         );
 
 
@@ -2181,8 +2926,9 @@ async function joinRoom() {
 }
 
 
-/* PLAYER ROOM */
-
+/* =========================
+   PLAYER ROOM
+========================= */
 
 function showPlayerRoom(
     roomCode
@@ -2194,9 +2940,11 @@ function showPlayerRoom(
             ♥
         </div>
 
+
         <h1>
             You're In
         </h1>
+
 
         <p class="subtitle">
             Waiting for the host...
@@ -2208,6 +2956,7 @@ function showPlayerRoom(
             <div class="room-code-label">
                 ROOM
             </div>
+
 
             <div class="room-code-number">
                 ${roomCode}
@@ -2224,15 +2973,19 @@ function showPlayerRoom(
         </div>
 
 
-        <div id="playerQuestionArea"></div>
+        <div
+            id="playerQuestionArea"
+        >
+        </div>
 
     `;
 
 }
 
 
-/* PLAYER VIEW */
-
+/* =========================
+   PLAYER VIEW
+========================= */
 
 function updatePlayerView(
     room
@@ -2250,7 +3003,10 @@ function updatePlayerView(
         );
 
 
-    if (!status || !area)
+    if (
+        !status ||
+        !area
+    )
         return;
 
 
@@ -2278,9 +3034,11 @@ function updatePlayerView(
 
 
         area.innerHTML = `
+
             <div class="empty">
                 Get ready ❤️
             </div>
+
         `;
 
         return;
@@ -2288,13 +3046,19 @@ function updatePlayerView(
     }
 
 
-    status.innerHTML =
-        `You're playing against
+    status.innerHTML = `
+
+        You're playing against
+
         <span class="player-name">
+
             ${escapeHTML(
                 room.hostName
             )}
-        </span>`;
+
+        </span>
+
+    `;
 
 
     const question =
@@ -2354,9 +3118,11 @@ function updatePlayerView(
 
 
             <h2>
+
                 ${escapeHTML(
                     question.question
                 )}
+
             </h2>
 
 
@@ -2367,7 +3133,10 @@ function updatePlayerView(
 
                 ${question.answers
                     .map(
-                        function(answer, index) {
+                        function(
+                            answer,
+                            index
+                        ) {
 
                             return `
 
@@ -2384,9 +3153,11 @@ function updatePlayerView(
                                     <span
                                         class="answer-letter"
                                     >
+
                                         ${String.fromCharCode(
                                             65 + index
                                         )}
+
                                     </span>
 
                                     ${escapeHTML(
@@ -2408,8 +3179,11 @@ function updatePlayerView(
 
                 ${
                     room.playerAnswered
+
                     ? "Answer submitted. ❤️"
+
                     : "Choose your answer."
+
                 }
 
             </div>
@@ -2427,16 +3201,19 @@ function updatePlayerView(
             function(button) {
 
                 button.onclick =
-                    function() {
+                function() {
 
-                        submitAnswer(
-                            Number(
-                                button.dataset.answer
-                            ),
-                            room
-                        );
+                    submitAnswer(
 
-                    };
+                        Number(
+                            button.dataset.answer
+                        ),
+
+                        room
+
+                    );
+
+                };
 
             }
         );
@@ -2464,10 +3241,14 @@ function updatePlayerView(
             buttons[
                 selected
             ].classList.add(
+
                 selected ===
                 question.correct
-                ? "correct"
-                : "wrong"
+
+                    ? "correct"
+
+                    : "wrong"
+
             );
 
         }
@@ -2477,8 +3258,9 @@ function updatePlayerView(
 }
 
 
-/* SUBMIT ANSWER */
-
+/* =========================
+   SUBMIT ANSWER
+========================= */
 
 async function submitAnswer(
     answer,
@@ -2505,11 +3287,13 @@ async function submitAnswer(
     try {
 
         await updateDoc(
+
             doc(
                 db,
                 "triviaRooms",
                 currentRoom
             ),
+
             {
 
                 playerAnswer:
@@ -2524,6 +3308,7 @@ async function submitAnswer(
                     : room.playerScore
 
             }
+
         );
 
     }
@@ -2539,8 +3324,9 @@ async function submitAnswer(
 }
 
 
-/* RESULTS */
-
+/* =========================
+   RESULTS
+========================= */
 
 function showResults(
     room
@@ -2549,28 +3335,36 @@ function showResults(
     const myScore =
         currentUser?.uid ===
         room.hostId
+
         ? room.hostScore
+
         : room.playerScore;
 
 
     const opponentScore =
         currentUser?.uid ===
         room.hostId
+
         ? room.playerScore
+
         : room.hostScore;
 
 
     const myName =
         currentUser?.uid ===
         room.hostId
+
         ? room.hostName
+
         : room.playerName;
 
 
     const opponentName =
         currentUser?.uid ===
         room.hostId
+
         ? room.playerName
+
         : room.hostName;
 
 
@@ -2624,7 +3418,6 @@ function showResults(
 
         <div class="score-board">
 
-
             <div class="score-box">
 
                 <div class="score-number">
@@ -2654,7 +3447,6 @@ function showResults(
 
             </div>
 
-
         </div>
 
 
@@ -2669,15 +3461,18 @@ function showResults(
 
 
     document
-        .getElementById("backHome")
+        .getElementById(
+            "backHome"
+        )
         .onclick =
         showMenu;
 
 }
 
 
-/* MENU */
-
+/* =========================
+   MENU
+========================= */
 
 function showMenu() {
 
@@ -2718,16 +3513,18 @@ function showMenu() {
 
         <div class="menu">
 
-
-            <button id="hostButton">
+            <button
+                id="hostButton"
+            >
                 Host a Round
             </button>
 
 
-            <button id="joinButton">
+            <button
+                id="joinButton"
+            >
                 Join a Round
             </button>
-
 
         </div>
 
@@ -2740,36 +3537,44 @@ function showMenu() {
 
 
     document
-        .getElementById("hostButton")
+        .getElementById(
+            "hostButton"
+        )
         .onclick =
         showHostScreen;
 
 
     document
-        .getElementById("joinButton")
+        .getElementById(
+            "joinButton"
+        )
         .onclick =
         showJoinScreen;
 
 }
 
 
-/* ROOM CODE */
-
+/* =========================
+   ROOM CODE
+========================= */
 
 function generateRoomCode() {
 
     return String(
+
         Math.floor(
             1000 +
             Math.random() * 9000
         )
+
     );
 
 }
 
 
-/* ESCAPE HTML */
-
+/* =========================
+   ESCAPE HTML
+========================= */
 
 function escapeHTML(
     text
@@ -2780,16 +3585,16 @@ function escapeHTML(
             "div"
         );
 
+
     div.textContent =
         text;
+
 
     return div.innerHTML;
 
 }
 
-
 </script>
-
 
 </body>
 
